@@ -538,15 +538,24 @@ const appViews = {
           <p id="desktop-greeting-sub">You have 5 tasks to complete today.</p>
         </div>
         <div class="greeting-actions">
+          <button class="btn btn-secondary" onclick="window.location.hash='#timetable'">
+            <span class="material-symbols-rounded">table_chart</span>
+            <span>Class Timetable</span>
+          </button>
           <button class="btn btn-secondary" onclick="window.location.hash='#calendar'">
             <span class="material-symbols-rounded">calendar_today</span>
-            <span>Schedule View</span>
+            <span>Schedule</span>
           </button>
           <button class="btn btn-primary" onclick="openTaskModal()">
             <span class="material-symbols-rounded">add</span>
             <span>New Task</span>
           </button>
         </div>
+      </div>
+
+      <!-- Next Up Anti-Procrastination Hero Card (Limekana/StudyDesk & DDL Killer) -->
+      <div id="next-up-hero-container">
+        <!-- Injected dynamically by initDashboardView() -->
       </div>
 
       <!-- Mobile Today's Pulse Section -->
@@ -600,6 +609,20 @@ const appViews = {
 
         <!-- Right Column: Deadlines & Progress -->
         <div class="dashboard-right-col">
+          <!-- Exam Radar Card (Hoot & Study-Buddy Inspired) -->
+          <div class="dashboard-panel" style="margin-bottom: 16px;">
+            <div class="panel-header-clean">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="material-symbols-rounded" style="color: #dc2626; font-size: 18px;">crisis_alert</span>
+                <h3 style="font-size: 15px;">Exam Countdown Radar</h3>
+              </div>
+              <span class="panel-tag" style="background: rgba(220,38,38,0.1); color: #dc2626;">MIDTERMS &amp; FINALS</span>
+            </div>
+            <div class="exam-radar-container" id="dashboard-exam-radar-container">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
           <div class="dashboard-panel">
             <div class="panel-header-clean">
               <h3>Upcoming Deadlines</h3>
@@ -731,6 +754,10 @@ const appViews = {
           </div>
 
           <span id="repo-showing-counter">Showing 24 of 156 tasks</span>
+          <button class="btn btn-secondary" onclick="openImportModal()" title="Bulk import tasks from syllabus or LMS">
+            <span class="material-symbols-rounded" style="font-size: 17px;">upload_file</span>
+            <span>Import</span>
+          </button>
           <button class="btn btn-secondary" id="btn-export-tasks" title="Export as CSV spreadsheet">
             <span class="material-symbols-rounded" style="font-size: 17px;">file_download</span>
             <span>CSV</span>
@@ -981,6 +1008,10 @@ const appViews = {
             <span class="material-symbols-rounded" style="font-size: 15px;">air</span>
             <span>White Noise</span>
           </button>
+          <button class="sound-toggle-pill" data-sound="ocean">
+            <span class="material-symbols-rounded" style="font-size: 15px;">waves</span>
+            <span>Ocean Waves</span>
+          </button>
         </div>
       </div>
 
@@ -1039,6 +1070,64 @@ const appViews = {
         </div>
       </div>
 
+      <!-- "What-If" Final Exam Grade Forecaster (GradePoint & Helium Inspired) -->
+      <div class="what-if-calculator-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div>
+            <h3 style="font-size: 17px; font-weight: 800;">"What-If" Final Exam Grade Forecaster</h3>
+            <p style="font-size: 13px; color: var(--text-secondary);">Calculate the exact score needed on your final exam to secure your target course grade</p>
+          </div>
+          <span class="badge" style="background: var(--accent-cyan-bg); color: var(--accent-cyan); font-weight: 700; padding: 4px 12px; border-radius: 999px;">
+            Target Calculator
+          </span>
+        </div>
+
+        <div class="what-if-grid">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">SELECT COURSE</label>
+              <select id="what-if-course-select" class="custom-select" style="width: 100%; padding: 8px 12px; font-size: 13px;" onchange="updateWhatIfCalc()">
+                <option value="MATH 301">MATH 301 - Multivariable Calculus (Final: 30%)</option>
+                <option value="BIO 102">BIO 102 - Molecular Biology (Final: 40%)</option>
+                <option value="HIST 205">HIST 205 - Modern World History (Final: 30%)</option>
+                <option value="PHYS 201">PHYS 201 - Classical Mechanics (Final: 40%)</option>
+                <option value="CS 301">CS 301 - Systems Architecture (Final: 30%)</option>
+                <option value="ART 110">ART 110 - Renaissance Art (Final: 30%)</option>
+              </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">DESIRED GRADE</label>
+                <select id="what-if-target-grade" class="custom-select" style="width: 100%; padding: 8px 12px; font-size: 13px;" onchange="updateWhatIfCalc()">
+                  <option value="93">A (93%)</option>
+                  <option value="90">A- (90%)</option>
+                  <option value="87">B+ (87%)</option>
+                  <option value="83">B (83%)</option>
+                  <option value="80">B- (80%)</option>
+                  <option value="75">C+ (75%)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CURRENT HOMEWORK (%)</label>
+                <input type="number" id="what-if-hw-score" class="form-input" value="94" min="0" max="100" style="padding: 7px 10px; font-size: 13px;" oninput="updateWhatIfCalc()">
+              </div>
+            </div>
+
+            <div>
+              <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MIDTERM EXAM SCORE (%)</label>
+              <input type="number" id="what-if-midterm-score" class="form-input" value="89" min="0" max="100" style="padding: 7px 10px; font-size: 13px;" oninput="updateWhatIfCalc()">
+            </div>
+          </div>
+
+          <div class="what-if-result-box">
+            <span style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; opacity: 0.9; text-transform: uppercase;">REQUIRED FINAL EXAM SCORE</span>
+            <div class="what-if-result-score" id="what-if-score-display">89.0%</div>
+            <p id="what-if-feasibility-note" style="font-size: 12.5px; opacity: 0.95; margin-top: 4px;">Very achievable! Keep maintaining problem sets.</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Active Courses Grid -->
       <div class="panel-header-clean">
         <div>
@@ -1049,6 +1138,68 @@ const appViews = {
 
       <div class="courses-cards-grid" id="courses-cards-grid">
         <!-- Rendered by initCoursesView() -->
+      </div>
+    </div>
+  `,
+
+  // 9. WEEKLY CLASS TIMETABLE VIEW (DDL Killer & Samwise Inspired)
+  timetable: () => `
+    <div class="timetable-wrapper">
+      <div class="timetable-header-row">
+        <div>
+          <h1 style="font-size: 24px; font-weight: 800;">Weekly Class Timetable</h1>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">
+            Semester lecture schedule, room locations, and automated free-study focus windows
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <div class="badge" style="background: #ecfdf5; color: #059669; border: 1px solid rgba(5,150,105,0.2); font-weight: 700; padding: 6px 14px; border-radius: 999px; font-size: 12.5px;">
+            96% Attendance (32/34 Lectures)
+          </div>
+          <button class="btn btn-secondary" onclick="exportToICalendar()">
+            <span class="material-symbols-rounded" style="font-size: 16px;">calendar_month</span>
+            <span>Export Schedule</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="timetable-grid-5day" id="timetable-grid-container">
+        <!-- Rendered by initTimetableView() -->
+      </div>
+    </div>
+  `,
+
+  // 10. STUDY NOTES & FORMULA SHEETS VIEW (Hoot & Notion Student OS Inspired)
+  notes: () => `
+    <div class="dashboard-panel">
+      <div class="panel-header-clean" style="margin-bottom: 20px;">
+        <div>
+          <h1 style="font-size: 24px; font-weight: 800;">Study Notes &amp; Formula Sheets</h1>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">
+            Quick reference concept summaries, exam cheat-sheets, and essential course formulas
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <div class="search-container" style="max-width: 260px;">
+            <span class="material-symbols-rounded search-icon">search</span>
+            <input type="text" id="notes-search-input" placeholder="Search formulas &amp; topics...">
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes Course Pills -->
+      <div class="repo-category-pills" id="notes-filter-pills" style="margin-bottom: 20px;">
+        <button class="filter-pill active" data-course="">All Courses</button>
+        <button class="filter-pill" data-course="MATH 301">MATH 301</button>
+        <button class="filter-pill" data-course="BIO 102">BIO 102</button>
+        <button class="filter-pill" data-course="CS 301">CS 301</button>
+        <button class="filter-pill" data-course="PHYS 201">PHYS 201</button>
+        <button class="filter-pill" data-course="HIST 205">HIST 205</button>
+        <button class="filter-pill" data-course="ART 110">ART 110</button>
+      </div>
+
+      <div class="notes-grid" id="notes-cards-container">
+        <!-- Rendered by initNotesView() -->
       </div>
     </div>
   `,
@@ -1163,6 +1314,12 @@ async function mountView(viewName) {
   } else if (actualView === 'courses') {
     appContainer.innerHTML = appViews.courses();
     await initCoursesView();
+  } else if (actualView === 'timetable') {
+    appContainer.innerHTML = appViews.timetable();
+    initTimetableView();
+  } else if (actualView === 'notes') {
+    appContainer.innerHTML = appViews.notes();
+    initNotesView();
   } else if (actualView === 'calendar') {
     appContainer.innerHTML = appViews.calendar();
     initCalendarView();
@@ -1184,10 +1341,56 @@ async function initDashboardView() {
   const statsRes = await apiFetch('/api/analytics/dashboard-stats');
   const stats = statsRes.data || { summary: { pending: 12, completed: 34, overdue: 2 }, upcomingDeadlines: [] };
 
+  const tasksRes = await apiFetch('/api/tasks?limit=25');
+  const allTasks = tasksRes.data || [];
+
+  // 0. Next Up Anti-Procrastination Engine (Limekana/StudyDesk & DDL Killer)
+  const nextUpContainer = document.getElementById('next-up-hero-container');
+  if (nextUpContainer) {
+    const pendingTasks = allTasks.filter(t => t.status !== 'completed');
+    if (pendingTasks.length > 0) {
+      const pWeights = { high: 12, medium: 6, low: 2 };
+      const scored = pendingTasks.map(t => {
+        const hoursLeft = Math.max(0.5, (new Date(t.dueDate).getTime() - Date.now()) / (1000 * 60 * 60));
+        const pScore = pWeights[t.priority] || 6;
+        const isExam = (t.category?.name || '').includes('Exam');
+        const score = (pScore * (isExam ? 2.5 : 1.5)) / Math.sqrt(hoursLeft);
+        return { task: t, score, hoursLeft };
+      });
+      scored.sort((a,b) => b.score - a.score);
+      const topTask = scored[0].task;
+      const hours = Math.max(1, Math.round((new Date(topTask.dueDate) - Date.now()) / (1000 * 60 * 60)));
+
+      nextUpContainer.innerHTML = `
+        <div class="next-up-hero-card">
+          <div style="flex: 1; min-width: 0;">
+            <div class="next-up-badge-wrap">
+              <span class="next-up-tag">⚡ Next Up: Focus Sprint</span>
+              <span class="next-up-urgency-score">• Anti-Procrastination Engine</span>
+            </div>
+            <div class="next-up-title" onclick="openTaskDetails('${topTask._id}')" style="cursor: pointer;">${topTask.title}</div>
+            <div class="next-up-meta">
+              <span class="course-tag" style="font-weight: 700;">${topTask.course || 'Course'}</span>
+              <span>Due in ${hours} hours</span>
+              <span>•</span>
+              <span class="priority-badge-visily ${topTask.priority}">${capitalize(topTask.priority)} Priority</span>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-launch-focus" onclick="launchFocusForTask('${topTask._id}')">
+              <span class="material-symbols-rounded">timer</span>
+              <span>1-Click Focus Sprint</span>
+            </button>
+          </div>
+        </div>
+      `;
+    } else {
+      nextUpContainer.innerHTML = '';
+    }
+  }
+
   // 1. Render Today's Tasks
   const todaysContainer = document.getElementById('todays-tasks-container');
-  const tasksRes = await apiFetch('/api/tasks?limit=6');
-  const allTasks = tasksRes.data || [];
 
   if (todaysContainer) {
     if (allTasks.length === 0) {
@@ -1212,6 +1415,32 @@ async function initDashboardView() {
               </span>
               <span class="priority-badge-visily ${task.priority}">${capitalize(task.priority)}</span>
             </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 1.5 Exam Radar (Hoot & Study-Buddy Inspired)
+  const examRadarEl = document.getElementById('dashboard-exam-radar-container');
+  if (examRadarEl) {
+    const examTasks = allTasks.filter(t => (t.category?.name === 'Exams' || /exam|midterm|quiz|final/i.test(t.title)) && t.status !== 'completed');
+    if (examTasks.length === 0) {
+      examRadarEl.innerHTML = '<p style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 10px 0;">No upcoming exams this week!</p>';
+    } else {
+      examRadarEl.innerHTML = examTasks.slice(0, 3).map(ex => {
+        const diffMs = new Date(ex.dueDate) - Date.now();
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        const urgentClass = diffDays <= 2 ? 'exam-countdown-urgent' : 'exam-countdown-medium';
+        const label = diffDays <= 0 ? 'Today' : diffDays === 1 ? 'Tomorrow' : `In ${diffDays} days`;
+
+        return `
+          <div class="exam-radar-row" onclick="openTaskDetails('${ex._id}')" style="cursor: pointer;">
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">${ex.title}</div>
+              <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">${ex.course || 'Academic'} • ${ex.category?.name || 'Exam'}</div>
+            </div>
+            <span class="exam-countdown-pill ${urgentClass}">${label}</span>
           </div>
         `;
       }).join('');
@@ -2320,18 +2549,32 @@ function startPomoAmbientSound(type) {
     whiteNoise.loop = true;
 
     const filter = pomoAudioCtx.createBiquadFilter();
+    pomoGainNode = pomoAudioCtx.createGain();
+
     if (type === 'rain') {
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(650, pomoAudioCtx.currentTime);
       filter.Q.setValueAtTime(1.5, pomoAudioCtx.currentTime);
+      pomoGainNode.gain.setValueAtTime(0.08, pomoAudioCtx.currentTime);
+    } else if (type === 'ocean') {
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(450, pomoAudioCtx.currentTime);
+      filter.Q.setValueAtTime(1.2, pomoAudioCtx.currentTime);
+      pomoGainNode.gain.setValueAtTime(0.04, pomoAudioCtx.currentTime);
+      // Gentle ocean swell LFO
+      const lfo = pomoAudioCtx.createOscillator();
+      const lfoGain = pomoAudioCtx.createGain();
+      lfo.frequency.setValueAtTime(0.12, pomoAudioCtx.currentTime);
+      lfoGain.gain.setValueAtTime(0.035, pomoAudioCtx.currentTime);
+      lfo.connect(lfoGain);
+      lfoGain.connect(pomoGainNode.gain);
+      lfo.start();
     } else {
       filter.type = 'bandpass';
       filter.frequency.setValueAtTime(1000, pomoAudioCtx.currentTime);
       filter.Q.setValueAtTime(0.8, pomoAudioCtx.currentTime);
+      pomoGainNode.gain.setValueAtTime(0.08, pomoAudioCtx.currentTime);
     }
-
-    pomoGainNode = pomoAudioCtx.createGain();
-    pomoGainNode.gain.setValueAtTime(0.08, pomoAudioCtx.currentTime);
 
     whiteNoise.connect(filter);
     filter.connect(pomoGainNode);
@@ -2634,6 +2877,374 @@ window.updateSimulatedGpa = function(courseId, newGrade) {
   if (badge) badge.innerText = `Predicted GPA: ${simGpa}`;
 };
 
+// ----------------------------------------------------
+// ANTI-PROCRASTINATION FOCUS LAUNCHER
+// ----------------------------------------------------
+window.launchFocusForTask = function(taskId) {
+  pomoState.selectedTaskId = taskId;
+  pomoState.mode = 'focus';
+  pomoState.timeLeft = pomoState.durations.focus;
+  window.location.hash = '#pomodoro';
+  setTimeout(() => {
+    startPomoTimer();
+    showToast('Focus session started for top priority task!');
+  }, 100);
+};
+
+// ----------------------------------------------------
+// "WHAT-IF" FINAL EXAM GRADE FORECASTER
+// ----------------------------------------------------
+window.updateWhatIfCalc = function() {
+  const courseCode = document.getElementById('what-if-course-select')?.value || 'MATH 301';
+  const targetGrade = parseFloat(document.getElementById('what-if-target-grade')?.value || '93');
+  const hwScore = parseFloat(document.getElementById('what-if-hw-score')?.value || '94');
+  const midScore = parseFloat(document.getElementById('what-if-midterm-score')?.value || '89');
+
+  const scoreDisplay = document.getElementById('what-if-score-display');
+  const noteDisplay = document.getElementById('what-if-feasibility-note');
+  if (!scoreDisplay) return;
+
+  const weights = {
+    'MATH 301': { hw: 0.40, mid: 0.30, final: 0.30 },
+    'BIO 102': { hw: 0.35, mid: 0.25, final: 0.40 },
+    'HIST 205': { hw: 0.45, mid: 0.25, final: 0.30 },
+    'PHYS 201': { hw: 0.30, mid: 0.30, final: 0.40 },
+    'CS 301': { hw: 0.50, mid: 0.20, final: 0.30 },
+    'ART 110': { hw: 0.40, mid: 0.30, final: 0.30 }
+  };
+
+  const w = weights[courseCode] || { hw: 0.40, mid: 0.30, final: 0.30 };
+  const currentEarned = (w.hw * hwScore) + (w.mid * midScore);
+  const neededScore = (targetGrade - currentEarned) / w.final;
+  const rounded = Math.round(neededScore * 10) / 10;
+
+  scoreDisplay.innerText = `${rounded}%`;
+
+  if (rounded <= 70) {
+    noteDisplay.innerText = 'Easily within reach! Standard review is sufficient.';
+  } else if (rounded <= 90) {
+    noteDisplay.innerText = 'Very achievable! Maintain problem set cadence.';
+  } else if (rounded <= 100) {
+    noteDisplay.innerText = 'Intense focus required! Review formula sheets & past midterms.';
+  } else {
+    noteDisplay.innerText = 'Extra credit required to reach this threshold score.';
+  }
+};
+
+// ----------------------------------------------------
+// CLASS TIMETABLE ENGINE (DDL Killer & Samwise Inspired)
+// ----------------------------------------------------
+const DEFAULT_TIMETABLE_DAYS = [
+  {
+    name: 'Monday',
+    short: 'Mon',
+    sessions: [
+      { code: 'MATH 301', title: 'Multivariable Calculus', time: '10:00 - 11:30 AM', room: 'Hall B-12', prof: 'Dr. Martinez', color: '#0284c7' },
+      { isFree: true, title: 'Free Study Window (2.5h)', time: '11:30 AM - 02:00 PM', tip: 'Ideal for Math Problem Set 4' },
+      { code: 'HIST 205', title: 'Modern World History', time: '02:00 - 03:30 PM', room: 'Humanities 110', prof: 'Prof. Adler', color: '#7c3aed' }
+    ]
+  },
+  {
+    name: 'Tuesday',
+    short: 'Tue',
+    sessions: [
+      { code: 'BIO 102', title: 'Molecular Biology', time: '09:30 - 11:00 AM', room: 'Life Sci 304', prof: 'Dr. Vance', color: '#16a34a' },
+      { isFree: true, title: 'Free Study Window (2.0h)', time: '11:00 AM - 01:00 PM', tip: 'Review cellular respiration notes' },
+      { code: 'PHYS 201', title: 'Classical Mechanics', time: '01:00 - 02:30 PM', room: 'Physics Annex 201', prof: 'Dr. Chen', color: '#0891b2' }
+    ]
+  },
+  {
+    name: 'Wednesday',
+    short: 'Wed',
+    sessions: [
+      { code: 'MATH 301', title: 'Multivariable Calculus', time: '10:00 - 11:30 AM', room: 'Hall B-12', prof: 'Dr. Martinez', color: '#0284c7' },
+      { code: 'CS 301', title: 'Systems Architecture', time: '11:30 AM - 01:00 PM', room: 'Turing Hall 402', prof: 'Prof. Robinson', color: '#2563eb' },
+      { code: 'HIST 205', title: 'Modern World History', time: '02:00 - 03:30 PM', room: 'Humanities 110', prof: 'Prof. Adler', color: '#7c3aed' }
+    ]
+  },
+  {
+    name: 'Thursday',
+    short: 'Thu',
+    sessions: [
+      { code: 'BIO 102', title: 'Molecular Biology', time: '09:30 - 11:00 AM', room: 'Life Sci 304', prof: 'Dr. Vance', color: '#16a34a' },
+      { isFree: true, title: 'Free Study Window (2.0h)', time: '11:00 AM - 01:00 PM', tip: 'Finish Physics wave interference draft' },
+      { code: 'PHYS 201', title: 'Classical Mechanics', time: '01:00 - 02:30 PM', room: 'Physics Annex 201', prof: 'Dr. Chen', color: '#0891b2' }
+    ]
+  },
+  {
+    name: 'Friday',
+    short: 'Fri',
+    sessions: [
+      { code: 'MATH 301', title: 'Multivariable Calculus', time: '10:00 - 11:30 AM', room: 'Hall B-12', prof: 'Dr. Martinez', color: '#0284c7' },
+      { code: 'CS 301', title: 'Systems Architecture', time: '11:30 AM - 01:00 PM', room: 'Turing Hall 402', prof: 'Prof. Robinson', color: '#2563eb' },
+      { isFree: true, title: 'Free Study Window (2.0h)', time: '01:00 - 03:00 PM', tip: 'Exam prep & problem set review' },
+      { code: 'ART 110', title: 'Renaissance & Baroque Art', time: '03:00 - 05:00 PM', room: 'Fine Arts Studio 3', prof: 'Dr. Dubois', color: '#d97706' }
+    ]
+  }
+];
+
+function initTimetableView() {
+  const container = document.getElementById('timetable-grid-container');
+  if (!container) return;
+
+  const timeHours = ['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM', '05:00 PM'];
+
+  let html = `
+    <div style="display: flex; flex-direction: column; gap: 24px; padding-top: 40px;">
+      ${timeHours.map(h => `<div class="timetable-time-slot">${h}</div>`).join('')}
+    </div>
+  `;
+
+  DEFAULT_TIMETABLE_DAYS.forEach(day => {
+    html += `
+      <div class="timetable-day-column">
+        <div class="timetable-day-header">${day.name}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+          ${day.sessions.map(s => {
+            if (s.isFree) {
+              return `
+                <div class="free-study-window-card" onclick="window.location.hash='#pomodoro'" title="Start Focus Session">
+                  <div class="free-window-title">
+                    <span class="material-symbols-rounded" style="font-size: 15px;">bolt</span>
+                    <span>${s.title}</span>
+                  </div>
+                  <div class="free-window-sub">${s.time}</div>
+                  <div style="font-size: 10px; color: #0d9488; font-weight: 600; margin-top: 2px;">⚡ ${s.tip}</div>
+                </div>
+              `;
+            }
+            return `
+              <div class="class-session-card" style="border-left-color: ${s.color};">
+                <div class="class-card-code">${s.code}</div>
+                <div class="class-card-name">${s.title}</div>
+                <div class="class-card-time-loc">
+                  <span class="material-symbols-rounded" style="font-size: 13px;">schedule</span>
+                  <span>${s.time}</span>
+                </div>
+                <div class="class-card-time-loc">
+                  <span class="material-symbols-rounded" style="font-size: 13px;">location_on</span>
+                  <span>${s.room} • ${s.prof}</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// ----------------------------------------------------
+// STUDY NOTES & FORMULA SHEETS ENGINE (Hoot & Notion OS)
+// ----------------------------------------------------
+const DEFAULT_STUDY_NOTES = [
+  {
+    id: 'note-1',
+    course: 'MATH 301',
+    title: "Stokes' Theorem & Surface Integrals",
+    formula: '∬_S (∇ × F) · dS = ∮_C F · dr',
+    tags: ['Vector Calculus', 'Finals', 'Exam Prep'],
+    content: 'Relates surface integral of curl over open surface S to line integral over oriented closed boundary curve C. Crucial for electromagnetic flux and fluid circulation.'
+  },
+  {
+    id: 'note-2',
+    course: 'MATH 301',
+    title: "Green's Theorem in the Plane",
+    formula: '∮_C (L dx + M dy) = ∬_D (∂M/∂x - ∂L/∂y) dA',
+    tags: ['Double Integrals', 'Midterm 2'],
+    content: 'Fundamental theorem of multivariable calculus in 2D. Connects counterclockwise circulation around curve C to 2D curl over enclosed region D.'
+  },
+  {
+    id: 'note-3',
+    course: 'CS 301',
+    title: 'Raft Distributed Consensus Quorum',
+    formula: 'Quorum = ⌊N / 2⌋ + 1',
+    tags: ['Distributed Systems', 'Fault Tolerance'],
+    content: 'A candidate node in Raft must receive positive votes from a majority quorum of servers to assume leadership. Heartbeats prevent split-brain states.'
+  },
+  {
+    id: 'note-4',
+    course: 'CS 301',
+    title: "Amdahl's Law Speedup Boundary",
+    formula: 'S_latency(s) = 1 / ((1 - p) + (p / s))',
+    tags: ['Parallel Computing', 'Architecture'],
+    content: 'Shows theoretical limit on execution speedup for parallel programs with serial fraction (1 - p). Even with infinite cores (s → ∞), speedup is capped at 1 / (1 - p).'
+  },
+  {
+    id: 'note-5',
+    course: 'BIO 102',
+    title: 'Cellular Respiration Net ATP Yield',
+    formula: 'C6H12O6 + 6O2 → 6CO2 + 6H2O + ~30-32 ATP',
+    tags: ['Metabolism', 'Krebs Cycle'],
+    content: 'Glycolysis yields 2 ATP + 2 NADH; Pyruvate decarboxylation yields 2 NADH; Krebs cycle yields 2 ATP + 6 NADH + 2 FADH2; Oxidative phosphorylation yields ~26 ATP.'
+  },
+  {
+    id: 'note-6',
+    course: 'PHYS 201',
+    title: 'Harmonic Motion & Frequency Relations',
+    formula: 'ω = √(k / m),   T = 2π / ω = 2π√(m / k)',
+    tags: ['Oscillations', 'Spring Systems'],
+    content: 'Position function is x(t) = A cos(ωt + φ). Restoring force F = -kx. Velocity is out of phase by π/2, acceleration is out of phase by π.'
+  },
+  {
+    id: 'note-7',
+    course: 'PHYS 201',
+    title: 'Two-Slit Interference Constructive Fringe',
+    formula: 'd sin(θ) = mλ,   y_m ≈ (mλL) / d',
+    tags: ['Wave Optics', 'Young Experiment'],
+    content: 'Path difference between rays equals integer multiple of wavelength for constructive maxima. For small angles, fringe spacing Δy = λL / d.'
+  },
+  {
+    id: 'note-8',
+    course: 'HIST 205',
+    title: 'Industrial Revolution Urbanization Driver',
+    formula: 'Enclosure Acts + Coal/Steam Power = Urban Migration',
+    tags: ['Industrialization', 'Demographics'],
+    content: 'Transition from agrarian guild system to mechanized factory cities like Manchester and Leeds. Shift fueled by Watt engine patents and railway expansion.'
+  }
+];
+
+function initNotesView() {
+  const container = document.getElementById('notes-cards-container');
+  const searchInput = document.getElementById('notes-search-input');
+  const filterPills = document.querySelectorAll('#notes-filter-pills .filter-pill');
+  if (!container) return;
+
+  let activeCourse = '';
+  let searchQuery = '';
+
+  const render = () => {
+    let filtered = DEFAULT_STUDY_NOTES.filter(n => {
+      if (activeCourse && n.course !== activeCourse) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        return n.title.toLowerCase().includes(q) || n.formula.toLowerCase().includes(q) || n.content.toLowerCase().includes(q) || n.tags.some(t => t.toLowerCase().includes(q));
+      }
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">No notes matching your search filter</p>';
+      return;
+    }
+
+    container.innerHTML = filtered.map(note => `
+      <div class="note-formula-card">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="course-code-pill" style="font-size: 13px;">${note.course}</span>
+          <div style="display: flex; gap: 4px;">
+            ${note.tags.map(t => `<span class="badge" style="background: var(--bg-tertiary); font-size: 10px; padding: 2px 6px; border-radius: 4px;">${t}</span>`).join('')}
+          </div>
+        </div>
+
+        <h3 style="font-size: 15px; font-weight: 700; margin: 4px 0 2px 0;">${note.title}</h3>
+
+        <div class="formula-block">
+          <span>${note.formula}</span>
+          <button class="btn-icon-subtle" onclick="copyFormulaToClipboard('${note.formula.replace(/'/g, "\\'")}')" title="Copy formula" style="border: none; background: transparent; cursor: pointer; color: var(--accent-cyan);">
+            <span class="material-symbols-rounded" style="font-size: 16px;">content_copy</span>
+          </button>
+        </div>
+
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin: 0;">${note.content}</p>
+      </div>
+    `).join('');
+  };
+
+  render();
+
+  searchInput?.addEventListener('input', (e) => {
+    searchQuery = e.target.value.trim();
+    render();
+  });
+
+  filterPills.forEach(pill => {
+    pill.onclick = () => {
+      filterPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeCourse = pill.getAttribute('data-course');
+      render();
+    };
+  });
+}
+
+window.copyFormulaToClipboard = function(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast(`Copied formula: ${text}`);
+  }).catch(() => {
+    showToast('Copied to clipboard');
+  });
+};
+
+// ----------------------------------------------------
+// BULK SYLLABUS & TASK IMPORTER (planit & DDL Killer)
+// ----------------------------------------------------
+window.openImportModal = function() {
+  document.getElementById('import-modal')?.classList.add('open');
+};
+
+window.closeImportModal = function() {
+  document.getElementById('import-modal')?.classList.remove('open');
+};
+
+window.submitBulkImport = async function() {
+  const textarea = document.getElementById('import-tasks-textarea');
+  if (!textarea || !textarea.value.trim()) {
+    showToast('Please enter at least one assignment line', 'error');
+    return;
+  }
+
+  const lines = textarea.value.trim().split('\n');
+  const importedTasks = [];
+
+  lines.forEach((line, idx) => {
+    const parts = line.split('|').map(s => s.trim());
+    if (parts[0]) {
+      const title = parts[0];
+      const course = parts[1] || 'General';
+      const dueStr = parts[2] || new Date(Date.now() + (idx + 2) * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      const priorityRaw = (parts[3] || 'medium').toLowerCase();
+      const priority = priorityRaw.includes('high') ? 'high' : priorityRaw.includes('low') ? 'low' : 'medium';
+
+      const catName = /exam|quiz|midterm/i.test(title) ? 'Exams' : /project/i.test(title) ? 'Projects' : 'Assignments';
+      const catObj = DEFAULT_CATEGORIES.find(c => c.name === catName) || DEFAULT_CATEGORIES[0];
+
+      importedTasks.push({
+        _id: 'task-import-' + Date.now() + '-' + idx,
+        title,
+        course,
+        category: catObj,
+        dueDate: new Date(`${dueStr}T23:59:00`).toISOString(),
+        priority,
+        status: 'pending',
+        remindMe: true,
+        description: `Imported from syllabus schedule for ${course}.`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    }
+  });
+
+  if (importedTasks.length === 0) {
+    showToast('No valid lines parsed', 'error');
+    return;
+  }
+
+  let tasks = JSON.parse(localStorage.getItem('visily_mock_tasks') || '[]');
+  tasks = [...importedTasks, ...tasks];
+  localStorage.setItem('visily_mock_tasks', JSON.stringify(tasks));
+
+  showToast(`Successfully imported ${importedTasks.length} tasks from syllabus!`);
+  closeImportModal();
+  textarea.value = '';
+
+  if (appState.activeView === 'tasks') await fetchAndRenderTasksTable();
+  if (appState.activeView === 'dashboard') await initDashboardView();
+  if (appState.activeView === 'kanban') await initKanbanView();
+};
+
 // Helpers
 function capitalize(s) {
   if (!s) return '';
@@ -2660,6 +3271,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('drawer-overlay')?.addEventListener('click', closeDrawer);
   document.getElementById('btn-close-modal')?.addEventListener('click', closeModal);
   document.getElementById('btn-cancel-modal')?.addEventListener('click', closeModal);
+  document.getElementById('btn-close-import-modal')?.addEventListener('click', closeImportModal);
+  document.getElementById('btn-cancel-import')?.addEventListener('click', closeImportModal);
 
   // Quick Add Button
   document.getElementById('btn-quick-add')?.addEventListener('click', () => openTaskModal());

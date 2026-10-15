@@ -63,6 +63,12 @@
             </a>
           </li>
           <li>
+            <a href="#timetable" class="nav-link" id="nav-timetable">
+              <span class="material-symbols-rounded">table_chart</span>
+              <span>Class Timetable</span>
+            </a>
+          </li>
+          <li>
             <a href="#pomodoro" class="nav-link" id="nav-pomodoro">
               <span class="material-symbols-rounded">timer</span>
               <span>Focus Timer</span>
@@ -78,6 +84,12 @@
             <a href="#courses" class="nav-link" id="nav-courses">
               <span class="material-symbols-rounded">school</span>
               <span>Courses &amp; GPA</span>
+            </a>
+          </li>
+          <li>
+            <a href="#notes" class="nav-link" id="nav-notes">
+              <span class="material-symbols-rounded">auto_stories</span>
+              <span>Notes &amp; Formulas</span>
             </a>
           </li>
           <li>
@@ -431,6 +443,39 @@
           </div>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Bulk Syllabus & Task Importer Modal (planit & DDL Killer Inspired) -->
+  <div id="import-modal" class="modal">
+    <div class="modal-content" style="max-width: 560px;">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="material-symbols-rounded" style="color: var(--accent-cyan); font-size: 24px;">upload_file</span>
+          <h3 style="font-size: 18px; font-weight: 800;">Import Syllabus &amp; Tasks</h3>
+        </div>
+        <button id="btn-close-import-modal" class="btn-icon" aria-label="Close modal">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <div style="padding: 20px 24px;">
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+          Paste assignments from your course syllabus, LMS (Canvas/Blackboard), or CSV list. One assignment per line:
+        </p>
+        <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px 12px; font-size: 11.5px; color: var(--text-muted); font-family: monospace; margin-bottom: 12px;">
+          Format: Task Title | Course | Due Date (YYYY-MM-DD) | Priority (Low/Med/High)<br>
+          Example: Problem Set 5 | MATH 301 | 2024-11-02 | High
+        </div>
+        <textarea id="import-tasks-textarea" class="form-input" rows="7" placeholder="Calculus Lab Report 3 | MATH 301 | 2024-11-04 | High
+Biology Quiz 4 | BIO 102 | 2024-11-06 | Medium
+History Presentation | HIST 205 | 2024-11-10 | High" style="width: 100%; font-family: monospace; font-size: 12.5px; padding: 10px;"></textarea>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" id="btn-cancel-import" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="btn-submit-import" class="btn btn-primary" onclick="submitBulkImport()">Import All Tasks</button>
+        </div>
+      </div>
     </div>
   </div>
 

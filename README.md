@@ -174,15 +174,21 @@ Alternatively, you can trigger compilation from the admin dashboard inside the w
 
 ---
 
-## 6. Advanced Academic Productivity Suite
+## 6. Systematic Academic Operating System
 
-The frontend has been upgraded with a comprehensive, anti-slop academic productivity suite:
+The application incorporates the top patterns from open-source student platforms (`study-buddy`, `DDL-Killer`, `StudyDesk`, `samwise`, `GradePoint`, `hoot`):
 
-* **Interactive Kanban Board (`#kanban`)**: 4-column sprint board (`To Do`, `In Progress`, `Review / Draft`, `Completed`) with 1-click move arrows, drag & drop card sorting, priority tags, and course badges.
-* **Deep Study Pomodoro Timer (`#pomodoro`)**: Focus sprints (25m), short breaks (5m), and long breaks (15m) with a circular SVG timer, real-time persistent header widget, task binding, and Web Audio API ambient soundscapes (Library Rain, White Noise, and chime alerts) with zero external asset dependencies.
-* **Courses & GPA Tracking (`#courses`)**: Real-time cumulative GPA calculations, credit load tracking, visual syllabus grading weight breakdowns (Problem Sets, Midterms, Finals), upcoming assignment counts, and an interactive **Target GPA Simulator**.
-* **Eisenhower Urgency/Importance Matrix**: 4-quadrant academic prioritization (`Do First`, `Schedule`, `Delegate/Quick Finish`, `Eliminate/Backlog`) integrated into the All Tasks repository with a 1-click view switcher (`Table` / `Kanban` / `Matrix`).
-* **Subtask Checklists in Quick-View**: Break complex course assignments into step-by-step checklists with progress percentage bars, inline additions, and completion toggles.
+* **"Next Up" Anti-Procrastination Engine (Inspired by Limekana/StudyDesk & DDL Killer)**: Dynamic urgency algorithm `(Weight% * 1.5) + (Priority) / sqrt(HoursLeft)` calculating the single highest-impact task a student should tackle right now, with a **"1-Click Focus Sprint"** button that immediately primes the timer.
+* **Exam Countdown Radar (Inspired by Hoot & Study-Buddy)**: Countdown tracking for Midterms, Quizzes, and Final presentations with urgency warning badges.
+* **Weekly Class Timetable (`#timetable`) (Inspired by DDL Killer & Samwise)**: Time-blocked Monday–Friday lecture schedule with room numbers, instructors, attendance tracking, and **automated Free-Study Focus Windows** between classes.
+* **"What-If" Final Exam Grade Forecaster (`#courses`) (Inspired by GradePoint & Helium)**: Reverse grade calculation showing the exact percentage needed on the final exam to secure a target letter grade (A, A-, B+, etc.).
+* **Study Notes & Formula Sheets Hub (`#notes`) (Inspired by Hoot & Notion Student OS)**: Instant formula reference and concept cheat-sheets for multivariable calculus, algorithms, distributed systems, cellular biology, and classical mechanics with one-click clipboard copying.
+* **Interactive Kanban Sprint Board (`#kanban`)**: 4-column academic stage board (`To Do`, `In Progress`, `Review / Draft`, `Completed`) with 1-click move arrows and drag & drop support.
+* **Deep Study Pomodoro Focus Timer (`#pomodoro`)**: 25m Focus / 5m Break / 15m Long Break with **Web Audio ambient soundscapes** (Library Rain, White Noise, Ocean Waves) with zero external audio dependencies, persistent header widget, and task binding.
+* **Courses & GPA Simulator (`#courses`)**: Real-time cumulative GPA calculations, credit load tracking, and syllabus weight breakdowns.
+* **Eisenhower Urgency/Importance Matrix**: 4-quadrant task prioritization integrated directly into the All Tasks repository with a 1-click view switcher (`Table` / `Kanban` / `Matrix`).
+* **Subtask Checklists in Quick-View**: Break complex course assignments into step-by-step checklists with progress percentage bars and inline item additions.
+* **Bulk Syllabus & Task Importer**: Paste lines from course syllabi or LMS portals to batch-import an entire semester's assignments in seconds.
 * **iCalendar (.ics) Sync**: Dynamic RFC 5545 `.ics` export generating instant 1-click calendar imports for Google Calendar, Apple Calendar, and Outlook.
 
 ---
@@ -191,4 +197,5 @@ The frontend has been upgraded with a comprehensive, anti-slop academic producti
 
 * **Live Demo**: [https://student-task-tracker-rho.vercel.app](https://student-task-tracker-rho.vercel.app)
 * **GitHub Repository**: [https://github.com/j4yop/student-task-tracker](https://github.com/j4yop/student-task-tracker)
+
 
