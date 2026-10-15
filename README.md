@@ -171,3 +171,24 @@ This runs the builder script programmatically outputting formatted documents:
 * `docs/project_report.pdf`
 * `docs/project_report.docx`
 Alternatively, you can trigger compilation from the admin dashboard inside the web application workspace.
+
+---
+
+## 6. Advanced Academic Productivity Suite
+
+The frontend has been upgraded with a comprehensive, anti-slop academic productivity suite:
+
+* **Interactive Kanban Board (`#kanban`)**: 4-column sprint board (`To Do`, `In Progress`, `Review / Draft`, `Completed`) with 1-click move arrows, drag & drop card sorting, priority tags, and course badges.
+* **Deep Study Pomodoro Timer (`#pomodoro`)**: Focus sprints (25m), short breaks (5m), and long breaks (15m) with a circular SVG timer, real-time persistent header widget, task binding, and Web Audio API ambient soundscapes (Library Rain, White Noise, and chime alerts) with zero external asset dependencies.
+* **Courses & GPA Tracking (`#courses`)**: Real-time cumulative GPA calculations, credit load tracking, visual syllabus grading weight breakdowns (Problem Sets, Midterms, Finals), upcoming assignment counts, and an interactive **Target GPA Simulator**.
+* **Eisenhower Urgency/Importance Matrix**: 4-quadrant academic prioritization (`Do First`, `Schedule`, `Delegate/Quick Finish`, `Eliminate/Backlog`) integrated into the All Tasks repository with a 1-click view switcher (`Table` / `Kanban` / `Matrix`).
+* **Subtask Checklists in Quick-View**: Break complex course assignments into step-by-step checklists with progress percentage bars, inline additions, and completion toggles.
+* **iCalendar (.ics) Sync**: Dynamic RFC 5545 `.ics` export generating instant 1-click calendar imports for Google Calendar, Apple Calendar, and Outlook.
+
+---
+
+## 7. Live Production Deployment
+
+* **Live Demo**: [https://student-task-tracker-rho.vercel.app](https://student-task-tracker-rho.vercel.app)
+* **GitHub Repository**: [https://github.com/j4yop/student-task-tracker](https://github.com/j4yop/student-task-tracker)
+

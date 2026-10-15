@@ -14,6 +14,12 @@ const DEFAULT_VISILY_TASKS = [
     priority: 'high',
     status: 'pending',
     remindMe: true,
+    subtasks: [
+      { id: 'st-1-1', text: 'Section 14.1 Multivariable functions & domain', completed: true },
+      { id: 'st-1-2', text: 'Section 14.2 Limits and continuity proofs', completed: true },
+      { id: 'st-1-3', text: 'Section 14.3 Partial derivatives computation', completed: false },
+      { id: 'st-1-4', text: 'Section 14.4 Tangent planes and linear approximations', completed: false }
+    ],
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
   },
@@ -27,6 +33,11 @@ const DEFAULT_VISILY_TASKS = [
     priority: 'medium',
     status: 'pending',
     remindMe: false,
+    subtasks: [
+      { id: 'st-2-1', text: 'Glycolysis pathways and net ATP balance', completed: true },
+      { id: 'st-2-2', text: 'Citric Acid Cycle (Krebs) intermediate steps', completed: false },
+      { id: 'st-2-3', text: 'Oxidative Phosphorylation & ATP Synthase diagram', completed: false }
+    ],
     createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
@@ -40,6 +51,11 @@ const DEFAULT_VISILY_TASKS = [
     priority: 'high',
     status: 'pending',
     remindMe: true,
+    subtasks: [
+      { id: 'st-3-1', text: 'Compile primary source interview excerpts', completed: true },
+      { id: 'st-3-2', text: 'Review slide structure with teammates in library', completed: true },
+      { id: 'st-3-3', text: 'Assign speaking segments for presentation', completed: false }
+    ],
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
   },
@@ -53,6 +69,10 @@ const DEFAULT_VISILY_TASKS = [
     priority: 'low',
     status: 'pending',
     remindMe: false,
+    subtasks: [
+      { id: 'st-4-1', text: 'Export MatLab wave interference graphs', completed: true },
+      { id: 'st-4-2', text: 'Write experimental error analysis section', completed: false }
+    ],
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
   },
@@ -693,11 +713,31 @@ const appViews = {
         <div class="repo-title-wrap">
           <h1>Task Repository</h1>
         </div>
-        <div class="repo-counter-export desktop-only">
+        <div class="repo-counter-export desktop-only" style="display: flex; align-items: center; gap: 12px;">
+          <!-- View switcher pills -->
+          <div class="view-switcher-wrap" id="repo-view-switcher">
+            <button class="view-switch-btn active" data-mode="table" title="Table View">
+              <span class="material-symbols-rounded" style="font-size: 16px;">view_list</span>
+              <span>Table</span>
+            </button>
+            <button class="view-switch-btn" data-mode="kanban" title="Kanban Board">
+              <span class="material-symbols-rounded" style="font-size: 16px;">view_kanban</span>
+              <span>Kanban</span>
+            </button>
+            <button class="view-switch-btn" data-mode="matrix" title="Eisenhower Matrix">
+              <span class="material-symbols-rounded" style="font-size: 16px;">grid_view</span>
+              <span>Matrix</span>
+            </button>
+          </div>
+
           <span id="repo-showing-counter">Showing 24 of 156 tasks</span>
-          <button class="btn btn-secondary" id="btn-export-tasks">
+          <button class="btn btn-secondary" id="btn-export-tasks" title="Export as CSV spreadsheet">
             <span class="material-symbols-rounded" style="font-size: 17px;">file_download</span>
-            <span>Export List</span>
+            <span>CSV</span>
+          </button>
+          <button class="btn btn-secondary" onclick="exportToICalendar()" title="Sync with Google or Apple Calendar">
+            <span class="material-symbols-rounded" style="font-size: 17px;">calendar_month</span>
+            <span>iCal Sync</span>
           </button>
         </div>
       </div>
@@ -836,15 +876,179 @@ const appViews = {
   calendar: () => `
     <div class="dashboard-panel">
       <div class="panel-header-clean">
-        <h2 id="calendar-month-year">October 2024</h2>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn-icon" id="btn-cal-prev"><span class="material-symbols-rounded">chevron_left</span></button>
-          <button class="btn btn-secondary" id="btn-cal-today">Today</button>
-          <button class="btn-icon" id="btn-cal-next"><span class="material-symbols-rounded">chevron_right</span></button>
+        <div>
+          <h2 id="calendar-month-year">October 2024</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">Sync academic deadlines and assignment dates with your personal calendar</p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-secondary" onclick="exportToICalendar()" title="Download .ics for Apple / Google Calendar">
+            <span class="material-symbols-rounded" style="font-size: 17px;">event_available</span>
+            <span>Export to iCal (.ics)</span>
+          </button>
+          <div style="display: flex; gap: 4px; margin-left: 8px;">
+            <button class="btn-icon" id="btn-cal-prev"><span class="material-symbols-rounded">chevron_left</span></button>
+            <button class="btn btn-secondary" id="btn-cal-today">Today</button>
+            <button class="btn-icon" id="btn-cal-next"><span class="material-symbols-rounded">chevron_right</span></button>
+          </div>
         </div>
       </div>
       <div id="calendar-days-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 16px;">
         <!-- Calendar days -->
+      </div>
+    </div>
+  `,
+
+  // 6. KANBAN BOARD VIEW
+  kanban: () => `
+    <div class="dashboard-panel">
+      <div class="panel-header-clean" style="margin-bottom: 20px;">
+        <div>
+          <h1 style="font-size: 24px; font-weight: 800;">Academic Kanban Board</h1>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">Organize homework, lab drafts, and semester milestones across interactive sprint stages</p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn btn-secondary" onclick="exportToICalendar()">
+            <span class="material-symbols-rounded" style="font-size: 17px;">calendar_month</span>
+            <span>Export iCal</span>
+          </button>
+          <button class="btn btn-primary" onclick="openTaskModal()">
+            <span class="material-symbols-rounded">add</span>
+            <span>New Task</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="kanban-board-container" id="kanban-board-container">
+        <!-- Columns will be injected by initKanbanView() -->
+      </div>
+    </div>
+  `,
+
+  // 7. POMODORO FOCUS TIMER VIEW
+  pomodoro: () => `
+    <div class="pomodoro-suite-card">
+      <div class="pomodoro-streak-badge">
+        <span class="material-symbols-rounded" style="font-size: 16px;">local_fire_department</span>
+        <span id="pomo-streak-text">4-Day Focus Streak • 3 Sessions Today</span>
+      </div>
+
+      <h1 style="font-size: 26px; font-weight: 800; margin-bottom: 6px;">Deep Study Timer</h1>
+      <p style="color: var(--text-secondary); font-size: 13.5px; margin-bottom: 20px;">Eliminate distractions with interval focus sprints and built-in ambient soundscapes</p>
+
+      <!-- Mode Selector Tabs -->
+      <div class="pomodoro-mode-selector" id="pomo-mode-tabs">
+        <button class="pomodoro-tab-btn active" data-mode="focus">Focus (25m)</button>
+        <button class="pomodoro-tab-btn" data-mode="shortBreak">Short Break (5m)</button>
+        <button class="pomodoro-tab-btn" data-mode="longBreak">Long Break (15m)</button>
+      </div>
+
+      <!-- Circular Timer -->
+      <div class="pomodoro-timer-circle" id="pomo-circle">
+        <div class="pomodoro-digits" id="pomo-timer-display">25:00</div>
+        <div class="pomodoro-mode-label" id="pomo-mode-display">DEEP FOCUS</div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pomodoro-actions-row">
+        <button class="btn btn-primary btn-pomodoro-main" id="btn-pomo-toggle">
+          <span class="material-symbols-rounded" id="pomo-toggle-icon">play_arrow</span>
+          <span id="pomo-toggle-label">Start Focus</span>
+        </button>
+        <button class="btn btn-secondary" id="btn-pomo-reset" title="Reset Current Session">
+          <span class="material-symbols-rounded">restart_alt</span>
+          <span>Reset</span>
+        </button>
+        <button class="btn btn-secondary" id="btn-pomo-skip" title="Skip to Next Cycle">
+          <span class="material-symbols-rounded">skip_next</span>
+        </button>
+      </div>
+
+      <!-- Ambient Soundscapes Bar -->
+      <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+        <span style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase;">
+          Ambient Soundscapes (Web Audio)
+        </span>
+        <div class="ambient-sounds-bar" id="pomo-sound-controls">
+          <button class="sound-toggle-pill active" data-sound="none">
+            <span class="material-symbols-rounded" style="font-size: 15px;">volume_off</span>
+            <span>Silent</span>
+          </button>
+          <button class="sound-toggle-pill" data-sound="rain">
+            <span class="material-symbols-rounded" style="font-size: 15px;">water_drop</span>
+            <span>Library Rain</span>
+          </button>
+          <button class="sound-toggle-pill" data-sound="whitenoise">
+            <span class="material-symbols-rounded" style="font-size: 15px;">air</span>
+            <span>White Noise</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Task Binding -->
+      <div class="pomodoro-task-binding-wrap">
+        <span style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase;">
+          Current Focus Task
+        </span>
+        <select id="pomo-task-selector" class="custom-select" style="width: 100%; margin-top: 8px;">
+          <!-- Injected task options -->
+        </select>
+      </div>
+    </div>
+  `,
+
+  // 8. COURSES & GPA PLANNER VIEW
+  courses: () => `
+    <div class="courses-gpa-container">
+      <!-- GPA Summary Hero Card -->
+      <div class="gpa-summary-card">
+        <div class="gpa-card-left">
+          <h2>Academic Standing: Dean's Honor List</h2>
+          <p>Fall 2024 Semester • Top 5% Percentile • 20 Total Enrolled Credits</p>
+          <div style="margin-top: 16px; display: flex; gap: 10px;">
+            <button class="btn" onclick="openTaskModal()" style="background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(4px);">
+              <span class="material-symbols-rounded">add</span>
+              <span>Add Course Task</span>
+            </button>
+            <button class="btn" onclick="exportToICalendar()" style="background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25);">
+              <span class="material-symbols-rounded">file_download</span>
+              <span>Export Semester Schedule</span>
+            </button>
+          </div>
+        </div>
+        <div class="gpa-metric-cluster">
+          <div style="text-align: right;">
+            <div class="gpa-huge-num" id="display-cum-gpa">3.84</div>
+            <div class="gpa-target-label">Cumulative GPA / 4.00 Max</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GPA Target Simulator -->
+      <div class="dashboard-panel" style="padding: 20px 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <div>
+            <h3 style="font-size: 16px; font-weight: 700;">Target GPA Simulator</h3>
+            <p style="font-size: 13px; color: var(--text-secondary);">Estimate final semester outcomes based on projected grades</p>
+          </div>
+          <span class="badge" style="background: var(--accent-cyan-bg); color: var(--accent-cyan); font-weight: 700; padding: 4px 10px; border-radius: 6px;" id="simulated-gpa-badge">
+            Predicted GPA: 3.84
+          </span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 14px;" id="gpa-sim-sliders-container">
+          <!-- Populated by initCoursesView() -->
+        </div>
+      </div>
+
+      <!-- Active Courses Grid -->
+      <div class="panel-header-clean">
+        <div>
+          <h2 style="font-size: 20px; font-weight: 700;">Enrolled Courses &amp; Syllabi</h2>
+          <p style="font-size: 13px; color: var(--text-secondary);">Course credits, current grades, and syllabus grade weight breakdowns</p>
+        </div>
+      </div>
+
+      <div class="courses-cards-grid" id="courses-cards-grid">
+        <!-- Rendered by initCoursesView() -->
       </div>
     </div>
   `,
@@ -950,6 +1154,15 @@ async function mountView(viewName) {
   } else if (actualView === 'tasks') {
     appContainer.innerHTML = appViews.tasks();
     await initTasksView();
+  } else if (actualView === 'kanban') {
+    appContainer.innerHTML = appViews.kanban();
+    await initKanbanView();
+  } else if (actualView === 'pomodoro') {
+    appContainer.innerHTML = appViews.pomodoro();
+    initPomodoroView();
+  } else if (actualView === 'courses') {
+    appContainer.innerHTML = appViews.courses();
+    await initCoursesView();
   } else if (actualView === 'calendar') {
     appContainer.innerHTML = appViews.calendar();
     initCalendarView();
@@ -1191,6 +1404,62 @@ async function initTasksView() {
       showToast('Exported tasks list successfully');
     };
   }
+
+  // View Switcher (Table vs Kanban vs Matrix)
+  const viewBtns = document.querySelectorAll('#repo-view-switcher .view-switch-btn');
+  viewBtns.forEach(btn => {
+    btn.onclick = async () => {
+      viewBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.getAttribute('data-mode');
+      const tableCard = document.getElementById('tasks-table-card');
+      if (!tableCard) return;
+
+      if (mode === 'table') {
+        tableCard.innerHTML = `
+          <div class="table-responsive" style="overflow-x: auto;">
+            <table class="tasks-table">
+              <thead>
+                <tr>
+                  <th class="col-chk">
+                    <input type="checkbox" id="master-select-chk" class="visily-checkbox" title="Select all">
+                  </th>
+                  <th>TASK TITLE &amp; DESCRIPTION</th>
+                  <th class="col-cat">CATEGORY</th>
+                  <th class="col-date">DEADLINE</th>
+                </tr>
+              </thead>
+              <tbody id="tasks-table-tbody"></tbody>
+            </table>
+          </div>
+          <div class="end-of-list-banner">
+            <div class="end-list-icon">
+              <span class="material-symbols-rounded">check</span>
+            </div>
+            <div class="end-list-title">You've reached the end of the list</div>
+            <div class="end-list-sub">Load more to see older or completed tasks</div>
+          </div>
+          <div class="repo-pagination-row">
+            <span id="pagination-showing-info">Showing 1-5 of 156</span>
+            <div class="pagination-buttons" id="pagination-controls-wrap"></div>
+          </div>
+        `;
+        document.getElementById('master-select-chk')?.addEventListener('change', (e) => {
+          document.querySelectorAll('.row-select-chk').forEach(c => {
+            c.checked = e.target.checked;
+            handleRowSelect(c.getAttribute('data-id'), c);
+          });
+        });
+        await fetchAndRenderTasksTable();
+      } else if (mode === 'kanban') {
+        const res = await apiFetch('/api/tasks?limit=100');
+        renderKanbanBoard(tableCard, res.data || []);
+      } else if (mode === 'matrix') {
+        const res = await apiFetch('/api/tasks?limit=100');
+        renderEisenhowerMatrix(tableCard, res.data || []);
+      }
+    };
+  });
 }
 
 async function fetchAndRenderTasksTable() {
@@ -1302,6 +1571,11 @@ async function openTaskDetails(taskId) {
   const createdDateStr = new Date(task.createdAt || Date.now()).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   const updatedDateStr = new Date(task.updatedAt || Date.now()).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
+  const subtasks = task.subtasks || [];
+  const completedSubtasks = subtasks.filter(s => s.completed).length;
+  const subtasksTotal = subtasks.length;
+  const subtasksPct = subtasksTotal > 0 ? Math.round((completedSubtasks / subtasksTotal) * 100) : 0;
+
   content.innerHTML = `
     <!-- Top Title and Status -->
     <div>
@@ -1359,6 +1633,32 @@ async function openTaskDetails(taskId) {
     <div class="drawer-desc-container">
       <span class="drawer-desc-label">FULL DESCRIPTION</span>
       <div class="drawer-desc-content">${task.description || 'No detailed instructions provided.'}</div>
+    </div>
+
+    <!-- Subtasks Checklist Section -->
+    <div class="subtasks-section" style="margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+      <div class="subtasks-header-row" style="display: flex; align-items: center; justify-content: space-between;">
+        <span class="meta-field-label">SUBTASKS &amp; CHECKLIST (${completedSubtasks}/${subtasksTotal})</span>
+        <span style="font-size: 12px; font-weight: 700; color: var(--accent-cyan);">${subtasksPct}%</span>
+      </div>
+      <div style="height: 6px; background: var(--bg-tertiary); border-radius: 999px; overflow: hidden; margin: 6px 0 12px 0;">
+        <div style="height: 100%; width: ${subtasksPct}%; background: var(--accent-cyan); transition: width 0.3s ease;"></div>
+      </div>
+      <div class="subtasks-list" id="drawer-subtasks-list" style="display: flex; flex-direction: column; gap: 6px;">
+        ${subtasks.map(st => `
+          <div class="subtask-item ${st.completed ? 'checked' : ''}" style="display: flex; align-items: center; gap: 8px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px;">
+            <input type="checkbox" class="visily-checkbox" ${st.completed ? 'checked' : ''} onchange="toggleSubtaskItem('${task._id}', '${st.id}', this.checked)">
+            <span style="flex: 1; font-size: 13px; ${st.completed ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${st.text}</span>
+            <button class="btn-icon-subtle" onclick="deleteSubtaskItem('${task._id}', '${st.id}')" title="Delete step" style="opacity: 0.5; border: none; background: transparent; cursor: pointer;">
+              <span class="material-symbols-rounded" style="font-size: 16px;">close</span>
+            </button>
+          </div>
+        `).join('')}
+      </div>
+      <div class="subtask-add-row" style="margin-top: 10px; display: flex; gap: 8px;">
+        <input type="text" id="new-subtask-text" class="form-input" placeholder="Add checklist item..." style="flex: 1; padding: 7px 10px; font-size: 13px;" onkeydown="if(event.key==='Enter'){event.preventDefault(); addSubtaskItem('${task._id}');}">
+        <button class="btn btn-secondary" onclick="addSubtaskItem('${task._id}')" style="padding: 6px 14px; font-size: 12.5px;">Add</button>
+      </div>
     </div>
 
     <!-- Audit Trail -->
@@ -1577,6 +1877,762 @@ function initSettingsView() {
     };
   }
 }
+
+// ----------------------------------------------------
+// ACADEMIC SUITE: COURSES DATA & GPA ENGINE
+// ----------------------------------------------------
+const DEFAULT_COURSES = [
+  {
+    id: 'course-1',
+    code: 'MATH 301',
+    name: 'Multivariable Calculus & Differential Eq',
+    credits: 4.0,
+    professor: 'Dr. Elena Martinez',
+    room: 'Hall B-12',
+    schedule: 'Mon, Wed, Fri 10:00 AM',
+    currentGrade: 'A',
+    percentage: 94,
+    color: '#0284c7',
+    syllabus: [
+      { label: 'Problem Sets', weight: 40, color: '#0284c7' },
+      { label: 'Midterm Exam', weight: 30, color: '#dc2626' },
+      { label: 'Final Exam', weight: 30, color: '#7c3aed' }
+    ]
+  },
+  {
+    id: 'course-2',
+    code: 'BIO 102',
+    name: 'Molecular & Cellular Biology',
+    credits: 4.0,
+    professor: 'Dr. Arthur Vance',
+    room: 'Life Sci 304',
+    schedule: 'Tue, Thu 09:30 AM',
+    currentGrade: 'A-',
+    percentage: 91,
+    color: '#16a34a',
+    syllabus: [
+      { label: 'Lab Reports', weight: 35, color: '#16a34a' },
+      { label: 'Weekly Quizzes', weight: 25, color: '#0284c7' },
+      { label: 'Final Exam', weight: 40, color: '#dc2626' }
+    ]
+  },
+  {
+    id: 'course-3',
+    code: 'HIST 205',
+    name: 'Modern European & Global History',
+    credits: 3.0,
+    professor: 'Prof. Clara Adler',
+    room: 'Humanities 110',
+    schedule: 'Mon, Wed 02:00 PM',
+    currentGrade: 'B+',
+    percentage: 88,
+    color: '#7c3aed',
+    syllabus: [
+      { label: 'Term Project', weight: 45, color: '#7c3aed' },
+      { label: 'Midterm', weight: 25, color: '#dc2626' },
+      { label: 'Participation', weight: 30, color: '#16a34a' }
+    ]
+  },
+  {
+    id: 'course-4',
+    code: 'PHYS 201',
+    name: 'Classical Mechanics & Wave Dynamics',
+    credits: 4.0,
+    professor: 'Dr. Marcus Chen',
+    room: 'Physics Annex 201',
+    schedule: 'Tue, Thu 01:00 PM',
+    currentGrade: 'A',
+    percentage: 95,
+    color: '#0891b2',
+    syllabus: [
+      { label: 'Lab Presentations', weight: 30, color: '#0891b2' },
+      { label: 'Weekly Sets', weight: 30, color: '#0284c7' },
+      { label: 'Final Exam', weight: 40, color: '#dc2626' }
+    ]
+  },
+  {
+    id: 'course-5',
+    code: 'CS 301',
+    name: 'Systems Architecture & Algorithms',
+    credits: 3.0,
+    professor: 'Prof. Sarah Robinson',
+    room: 'Turing Hall 402',
+    schedule: 'Wed, Fri 11:30 AM',
+    currentGrade: 'A',
+    percentage: 98,
+    color: '#2563eb',
+    syllabus: [
+      { label: 'Kernel Projects', weight: 50, color: '#2563eb' },
+      { label: 'Lab Reports', weight: 20, color: '#0284c7' },
+      { label: 'Final Exam', weight: 30, color: '#dc2626' }
+    ]
+  },
+  {
+    id: 'course-6',
+    code: 'ART 110',
+    name: 'Survey of Renaissance & Baroque Art',
+    credits: 2.0,
+    professor: 'Dr. Laurent Dubois',
+    room: 'Fine Arts Studio 3',
+    schedule: 'Fri 03:00 PM',
+    currentGrade: 'A',
+    percentage: 93,
+    color: '#d97706',
+    syllabus: [
+      { label: 'Weekly Quizzes', weight: 40, color: '#d97706' },
+      { label: 'Gallery Critique', weight: 30, color: '#7c3aed' },
+      { label: 'Final Paper', weight: 30, color: '#0284c7' }
+    ]
+  }
+];
+
+const GRADE_POINTS = {
+  'A+': 4.0, 'A': 4.0, 'A-': 3.7,
+  'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+  'C+': 2.3, 'C': 2.0, 'C-': 1.7,
+  'D': 1.0, 'F': 0.0
+};
+
+// ----------------------------------------------------
+// SUBTASKS CONTROLLER
+// ----------------------------------------------------
+window.toggleSubtaskItem = async function(taskId, subtaskId, isChecked) {
+  const res = await apiFetch(`/api/tasks/${taskId}`);
+  const task = res.data;
+  if (!task) return;
+  task.subtasks = task.subtasks || [];
+  const st = task.subtasks.find(s => s.id === subtaskId);
+  if (st) {
+    st.completed = isChecked;
+    await apiFetch(`/api/tasks/${taskId}`, { method: 'PUT', body: JSON.stringify({ subtasks: task.subtasks }) });
+    openTaskDetails(taskId);
+  }
+};
+
+window.addSubtaskItem = async function(taskId) {
+  const input = document.getElementById('new-subtask-text');
+  if (!input || !input.value.trim()) return;
+  const text = input.value.trim();
+  const res = await apiFetch(`/api/tasks/${taskId}`);
+  const task = res.data;
+  if (!task) return;
+  task.subtasks = task.subtasks || [];
+  task.subtasks.push({ id: 'st-' + Date.now(), text, completed: false });
+  await apiFetch(`/api/tasks/${taskId}`, { method: 'PUT', body: JSON.stringify({ subtasks: task.subtasks }) });
+  input.value = '';
+  openTaskDetails(taskId);
+};
+
+window.deleteSubtaskItem = async function(taskId, subtaskId) {
+  const res = await apiFetch(`/api/tasks/${taskId}`);
+  const task = res.data;
+  if (!task) return;
+  task.subtasks = (task.subtasks || []).filter(s => s.id !== subtaskId);
+  await apiFetch(`/api/tasks/${taskId}`, { method: 'PUT', body: JSON.stringify({ subtasks: task.subtasks }) });
+  openTaskDetails(taskId);
+};
+
+// ----------------------------------------------------
+// iCALENDAR (.ICS) EXPORT ENGINE
+// ----------------------------------------------------
+window.exportToICalendar = function() {
+  const tasks = JSON.parse(localStorage.getItem('visily_mock_tasks') || '[]');
+  if (!tasks.length) {
+    showToast('No tasks available to export', 'error');
+    return;
+  }
+
+  const formatIcsDate = (d) => {
+    const date = new Date(d);
+    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  };
+
+  let ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Student Task Tracker//Academic Productivity Suite//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:Academic Deadlines & Tasks'
+  ];
+
+  tasks.forEach(t => {
+    const due = new Date(t.dueDate);
+    const start = new Date(due.getTime() - 60 * 60 * 1000);
+    const uid = `${t._id || 'task-' + Math.random().toString(36).substr(2, 9)}@studenttracker.app`;
+    const summary = (t.course ? `[${t.course}] ` : '') + (t.title || 'Academic Task');
+    const desc = (t.description || '').replace(/\n/g, '\\n');
+    const cat = t.category?.name || 'Academic';
+
+    ics.push('BEGIN:VEVENT');
+    ics.push(`UID:${uid}`);
+    ics.push(`DTSTAMP:${formatIcsDate(new Date())}`);
+    ics.push(`DTSTART:${formatIcsDate(start)}`);
+    ics.push(`DTEND:${formatIcsDate(due)}`);
+    ics.push(`SUMMARY:${summary}`);
+    ics.push(`DESCRIPTION:${desc}`);
+    ics.push(`CATEGORIES:${cat}`);
+    ics.push(`STATUS:${t.status === 'completed' ? 'COMPLETED' : 'CONFIRMED'}`);
+    ics.push('END:VEVENT');
+  });
+
+  ics.push('END:VCALENDAR');
+
+  const blob = new Blob([ics.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'academic_schedule.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Downloaded academic_schedule.ics for Google/Apple Calendar!');
+};
+
+// ----------------------------------------------------
+// KANBAN BOARD ENGINE
+// ----------------------------------------------------
+async function initKanbanView() {
+  const container = document.getElementById('kanban-board-container');
+  if (!container) return;
+  const res = await apiFetch('/api/tasks?limit=100');
+  renderKanbanBoard(container, res.data || []);
+}
+
+function renderKanbanBoard(container, tasks) {
+  if (!container) return;
+
+  // 4 Lanes
+  const lanes = {
+    todo: { title: 'TO DO', color: '#64748b', items: [] },
+    in_progress: { title: 'IN PROGRESS', color: '#0284c7', items: [] },
+    review: { title: 'REVIEW / DRAFT', color: '#7c3aed', items: [] },
+    completed: { title: 'COMPLETED', color: '#16a34a', items: [] }
+  };
+
+  tasks.forEach(t => {
+    if (t.status === 'completed') {
+      lanes.completed.items.push(t);
+    } else if (t.status === 'review' || (t.title && /draft|phase 1|review|report/i.test(t.title))) {
+      lanes.review.items.push(t);
+    } else if (t.priority === 'high' || t.status === 'in_progress') {
+      lanes.in_progress.items.push(t);
+    } else {
+      lanes.todo.items.push(t);
+    }
+  });
+
+  const laneKeys = ['todo', 'in_progress', 'review', 'completed'];
+
+  container.innerHTML = laneKeys.map((key, idx) => {
+    const col = lanes[key];
+    const prevKey = idx > 0 ? laneKeys[idx - 1] : null;
+    const nextKey = idx < laneKeys.length - 1 ? laneKeys[idx + 1] : null;
+
+    return `
+      <div class="kanban-column" ondragover="event.preventDefault();" ondrop="handleKanbanDrop(event, '${key}')">
+        <div class="kanban-col-header">
+          <div class="kanban-col-title">
+            <span class="cat-dot" style="background-color: ${col.color};"></span>
+            <span>${col.title}</span>
+          </div>
+          <span class="kanban-count-badge">${col.items.length}</span>
+        </div>
+
+        <div class="kanban-cards-list">
+          ${col.items.length === 0 ? '<p style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 24px 0;">No tasks in this lane</p>' : ''}
+          ${col.items.map(task => {
+            const dateStr = new Date(task.dueDate).toLocaleDateString([], { month: 'short', day: 'numeric' });
+            const catClass = getCatClass(task.category?.name);
+            return `
+              <div class="kanban-task-card" draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '${task._id}')" onclick="openTaskDetails('${task._id}')">
+                <div class="kanban-card-top">
+                  <span class="category-pill-badge ${catClass}" style="font-size: 10px; padding: 2px 7px;">${task.category?.name || 'Task'}</span>
+                  ${task.priority === 'high' ? '<span class="badge" style="background: rgba(220,38,38,0.1); color: #dc2626; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px;">High</span>' : ''}
+                </div>
+                <div class="kanban-card-title">${task.title}</div>
+                <div class="kanban-card-footer">
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <span class="material-symbols-rounded" style="font-size: 14px;">calendar_today</span>
+                    <span>${dateStr}</span>
+                  </div>
+                  <div class="kanban-move-actions" onclick="event.stopPropagation();">
+                    ${prevKey ? `<button class="btn-kanban-move" title="Move Left" onclick="moveKanbanTask('${task._id}', '${prevKey}')">‹</button>` : ''}
+                    ${nextKey ? `<button class="btn-kanban-move" title="Move Right" onclick="moveKanbanTask('${task._id}', '${nextKey}')">›</button>` : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.moveKanbanTask = async function(taskId, targetLane) {
+  let status = 'pending';
+  if (targetLane === 'completed') status = 'completed';
+  if (targetLane === 'review') status = 'review';
+  if (targetLane === 'in_progress') status = 'in_progress';
+  if (targetLane === 'todo') status = 'pending';
+
+  await apiFetch(`/api/tasks/${taskId}`, { method: 'PUT', body: JSON.stringify({ status }) });
+  showToast(`Moved task to ${targetLane.replace('_', ' ').toUpperCase()}`);
+
+  if (appState.activeView === 'kanban') {
+    await initKanbanView();
+  } else {
+    const tableCard = document.getElementById('tasks-table-card');
+    const res = await apiFetch('/api/tasks?limit=100');
+    renderKanbanBoard(tableCard, res.data || []);
+  }
+};
+
+window.handleKanbanDrop = function(e, targetLane) {
+  e.preventDefault();
+  const taskId = e.dataTransfer.getData('text/plain');
+  if (taskId) {
+    moveKanbanTask(taskId, targetLane);
+  }
+};
+
+// ----------------------------------------------------
+// EISENHOWER MATRIX ENGINE
+// ----------------------------------------------------
+function renderEisenhowerMatrix(container, tasks) {
+  if (!container) return;
+
+  const now = Date.now();
+  const quadrants = {
+    q1: { title: 'DO FIRST (Urgent & Important)', sub: 'Due in < 48h • High Priority / Exams', color: '#dc2626', class: 'q1-urgent-important', items: [] },
+    q2: { title: 'SCHEDULE (Not Urgent & Important)', sub: 'Due in > 48h • Major Projects & Core Homework', color: '#06b6d4', class: 'q2-schedule', items: [] },
+    q3: { title: 'DELEGATE / QUICK (Urgent & Not Important)', sub: 'Due in < 48h • Minor Errands & Low Weight', color: '#f59e0b', class: 'q3-delegate', items: [] },
+    q4: { title: 'ELIMINATE / BACKLOG (Low Priority)', sub: 'Due in > 48h • Personal Goals & Backlog', color: '#64748b', class: 'q4-eliminate', items: [] }
+  };
+
+  tasks.forEach(t => {
+    if (t.status === 'completed') return;
+    const dueTime = new Date(t.dueDate).getTime();
+    const isUrgent = (dueTime - now) <= (48 * 60 * 60 * 1000);
+    const isImportant = t.priority === 'high' || (t.category?.name && /exam|project/i.test(t.category.name));
+
+    if (isUrgent && isImportant) {
+      quadrants.q1.items.push(t);
+    } else if (!isUrgent && isImportant) {
+      quadrants.q2.items.push(t);
+    } else if (isUrgent && !isImportant) {
+      quadrants.q3.items.push(t);
+    } else {
+      quadrants.q4.items.push(t);
+    }
+  });
+
+  container.innerHTML = `
+    <div class="matrix-grid-container" style="padding: 16px;">
+      ${Object.keys(quadrants).map(key => {
+        const q = quadrants[key];
+        return `
+          <div class="matrix-quadrant ${q.class}">
+            <div class="quadrant-header">
+              <div>
+                <strong style="color: ${q.color}; font-size: 13.5px; letter-spacing: 0.04em;">${q.title}</strong>
+                <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">${q.sub}</p>
+              </div>
+              <span class="badge" style="background: var(--bg-tertiary); font-weight: 700; padding: 2px 8px; border-radius: 12px; font-size: 12px;">${q.items.length}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; overflow-y: auto; max-height: 250px;">
+              ${q.items.length === 0 ? '<p style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 18px 0;">No active tasks in this quadrant</p>' : ''}
+              ${q.items.map(t => {
+                const dateStr = new Date(t.dueDate).toLocaleDateString([], { month: 'short', day: 'numeric' });
+                return `
+                  <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: transform 0.15s ease;" onclick="openTaskDetails('${t._id}')">
+                    <div style="flex: 1; min-width: 0;">
+                      <div style="font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-primary);">${t.title}</div>
+                      <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${t.course || 'Course'} • Due ${dateStr}</div>
+                    </div>
+                    <button class="btn-icon-subtle" onclick="event.stopPropagation(); toggleTaskComplete('${t._id}', true);" title="Mark Done" style="border: none; background: transparent; cursor: pointer; color: var(--accent-cyan);">
+                      <span class="material-symbols-rounded" style="font-size: 18px;">check_circle</span>
+                    </button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+// ----------------------------------------------------
+// POMODORO FOCUS TIMER ENGINE WITH WEB AUDIO SOUNDS
+// ----------------------------------------------------
+const pomoState = {
+  mode: 'focus',
+  durations: { focus: 25 * 60, shortBreak: 5 * 60, longBreak: 15 * 60 },
+  timeLeft: 25 * 60,
+  isRunning: false,
+  timerId: null,
+  activeSound: 'none',
+  completedSessions: parseInt(localStorage.getItem('pomo_completed') || '3'),
+  selectedTaskId: null
+};
+
+let pomoAudioCtx = null;
+let pomoNoiseNode = null;
+let pomoGainNode = null;
+
+function stopPomoAmbientSound() {
+  if (pomoNoiseNode) {
+    try {
+      pomoNoiseNode.stop();
+      pomoNoiseNode.disconnect();
+    } catch(e){}
+    pomoNoiseNode = null;
+  }
+}
+
+function startPomoAmbientSound(type) {
+  stopPomoAmbientSound();
+  if (type === 'none') return;
+
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!pomoAudioCtx) {
+      pomoAudioCtx = new AudioContext();
+    }
+    if (pomoAudioCtx.state === 'suspended') {
+      pomoAudioCtx.resume();
+    }
+
+    const bufferSize = pomoAudioCtx.sampleRate * 2;
+    const noiseBuffer = pomoAudioCtx.createBuffer(1, bufferSize, pomoAudioCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+
+    const whiteNoise = pomoAudioCtx.createBufferSource();
+    whiteNoise.buffer = noiseBuffer;
+    whiteNoise.loop = true;
+
+    const filter = pomoAudioCtx.createBiquadFilter();
+    if (type === 'rain') {
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(650, pomoAudioCtx.currentTime);
+      filter.Q.setValueAtTime(1.5, pomoAudioCtx.currentTime);
+    } else {
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(1000, pomoAudioCtx.currentTime);
+      filter.Q.setValueAtTime(0.8, pomoAudioCtx.currentTime);
+    }
+
+    pomoGainNode = pomoAudioCtx.createGain();
+    pomoGainNode.gain.setValueAtTime(0.08, pomoAudioCtx.currentTime);
+
+    whiteNoise.connect(filter);
+    filter.connect(pomoGainNode);
+    pomoGainNode.connect(pomoAudioCtx.destination);
+
+    whiteNoise.start();
+    pomoNoiseNode = whiteNoise;
+  } catch (err) {
+    console.warn('Web Audio Ambient error:', err);
+  }
+}
+
+function playPomoChime() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+    const chords = [523.25, 659.25, 783.99, 1046.50];
+    chords.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.12);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime + idx * 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.12 + 1.2);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + idx * 0.12);
+      osc.stop(ctx.currentTime + idx * 0.12 + 1.3);
+    });
+  } catch (e) {
+    console.warn('Chime error:', e);
+  }
+}
+
+function updateHeaderPomodoroWidget() {
+  const pillText = document.getElementById('header-pomodoro-text');
+  const pillDot = document.querySelector('#header-pomodoro-pill .pomodoro-pulse-dot');
+  if (!pillText) return;
+
+  const mins = Math.floor(pomoState.timeLeft / 60);
+  const secs = pomoState.timeLeft % 60;
+  const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  const modeStr = pomoState.mode === 'focus' ? 'Focus' : 'Break';
+
+  pillText.innerText = `${timeStr} ${modeStr}`;
+  if (pillDot) {
+    pillDot.style.backgroundColor = pomoState.isRunning ? (pomoState.mode === 'focus' ? '#22c55e' : '#06b6d4') : '#94a3b8';
+    pillDot.style.animation = pomoState.isRunning ? 'pulseGlow 2s infinite' : 'none';
+  }
+}
+
+function updatePomodoroDisplay() {
+  const display = document.getElementById('pomo-timer-display');
+  const modeLabel = document.getElementById('pomo-mode-display');
+  const toggleIcon = document.getElementById('pomo-toggle-icon');
+  const toggleLabel = document.getElementById('pomo-toggle-label');
+  const circle = document.getElementById('pomo-circle');
+
+  const mins = Math.floor(pomoState.timeLeft / 60);
+  const secs = pomoState.timeLeft % 60;
+  const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+  if (display) display.innerText = timeStr;
+  if (modeLabel) modeLabel.innerText = pomoState.mode === 'focus' ? 'DEEP FOCUS' : 'REST INTERVAL';
+  if (toggleIcon) toggleIcon.innerText = pomoState.isRunning ? 'pause' : 'play_arrow';
+  if (toggleLabel) toggleLabel.innerText = pomoState.isRunning ? 'Pause' : 'Start Focus';
+
+  if (circle) {
+    const fraction = pomoState.timeLeft / pomoState.durations[pomoState.mode];
+    circle.style.borderColor = pomoState.mode === 'focus' ? 'var(--accent-cyan)' : '#22c55e';
+  }
+
+  updateHeaderPomodoroWidget();
+}
+
+function startPomoTimer() {
+  if (pomoState.isRunning) return;
+  pomoState.isRunning = true;
+  if (pomoState.activeSound !== 'none') {
+    startPomoAmbientSound(pomoState.activeSound);
+  }
+  pomoState.timerId = setInterval(() => {
+    if (pomoState.timeLeft > 0) {
+      pomoState.timeLeft--;
+      updatePomodoroDisplay();
+    } else {
+      clearInterval(pomoState.timerId);
+      pomoState.isRunning = false;
+      stopPomoAmbientSound();
+      playPomoChime();
+
+      if (pomoState.mode === 'focus') {
+        pomoState.completedSessions++;
+        localStorage.setItem('pomo_completed', pomoState.completedSessions);
+        showToast('Focus session complete! Time for a short break.');
+        pomoState.mode = 'shortBreak';
+      } else {
+        showToast('Break finished! Ready for next focus sprint?');
+        pomoState.mode = 'focus';
+      }
+      pomoState.timeLeft = pomoState.durations[pomoState.mode];
+      updatePomodoroDisplay();
+    }
+  }, 1000);
+  updatePomodoroDisplay();
+}
+
+function pausePomoTimer() {
+  pomoState.isRunning = false;
+  clearInterval(pomoState.timerId);
+  stopPomoAmbientSound();
+  updatePomodoroDisplay();
+}
+
+function resetPomoTimer() {
+  pausePomoTimer();
+  pomoState.timeLeft = pomoState.durations[pomoState.mode];
+  updatePomodoroDisplay();
+}
+
+async function initPomodoroView() {
+  updatePomodoroDisplay();
+
+  // Mode tabs
+  const tabs = document.querySelectorAll('#pomo-mode-tabs .pomodoro-tab-btn');
+  tabs.forEach(tab => {
+    tab.onclick = () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const mode = tab.getAttribute('data-mode');
+      pomoState.mode = mode;
+      resetPomoTimer();
+    };
+  });
+
+  // Action buttons
+  document.getElementById('btn-pomo-toggle')?.addEventListener('click', () => {
+    if (pomoState.isRunning) pausePomoTimer();
+    else startPomoTimer();
+  });
+
+  document.getElementById('btn-pomo-reset')?.addEventListener('click', resetPomoTimer);
+
+  document.getElementById('btn-pomo-skip')?.addEventListener('click', () => {
+    pausePomoTimer();
+    pomoState.mode = pomoState.mode === 'focus' ? 'shortBreak' : 'focus';
+    pomoState.timeLeft = pomoState.durations[pomoState.mode];
+    tabs.forEach(t => {
+      if (t.getAttribute('data-mode') === pomoState.mode) t.classList.add('active');
+      else t.classList.remove('active');
+    });
+    updatePomodoroDisplay();
+  });
+
+  // Ambient sound pills
+  const soundPills = document.querySelectorAll('#pomo-sound-controls .sound-toggle-pill');
+  soundPills.forEach(pill => {
+    pill.onclick = () => {
+      soundPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const soundType = pill.getAttribute('data-sound');
+      pomoState.activeSound = soundType;
+      if (pomoState.isRunning) {
+        startPomoAmbientSound(soundType);
+      }
+      showToast(`Ambient Sound: ${soundType === 'none' ? 'Muted' : soundType.toUpperCase()}`);
+    };
+  });
+
+  // Populate task selector
+  const taskSel = document.getElementById('pomo-task-selector');
+  if (taskSel) {
+    const res = await apiFetch('/api/tasks?limit=20');
+    const tasks = (res.data || []).filter(t => t.status !== 'completed');
+    taskSel.innerHTML = `
+      <option value="">-- Select a task to focus on --</option>
+      ${tasks.map(t => `<option value="${t._id}">${t.course ? `[${t.course}] ` : ''}${t.title}</option>`).join('')}
+    `;
+    taskSel.onchange = (e) => {
+      pomoState.selectedTaskId = e.target.value;
+      if (e.target.value) {
+        const found = tasks.find(t => t._id === e.target.value);
+        if (found) showToast(`Bound Focus Timer to: ${found.title}`);
+      }
+    };
+  }
+}
+
+// ----------------------------------------------------
+// COURSES & GPA PLANNER ENGINE
+// ----------------------------------------------------
+async function initCoursesView() {
+  const grid = document.getElementById('courses-cards-grid');
+  const gpaHuge = document.getElementById('display-cum-gpa');
+  const simContainer = document.getElementById('gpa-sim-sliders-container');
+
+  const res = await apiFetch('/api/tasks?limit=100');
+  const tasks = res.data || [];
+
+  // Calculate cumulative GPA
+  let totalQualityPoints = 0;
+  let totalCredits = 0;
+
+  DEFAULT_COURSES.forEach(c => {
+    const pts = GRADE_POINTS[c.currentGrade] || 3.0;
+    totalQualityPoints += pts * c.credits;
+    totalCredits += c.credits;
+  });
+
+  const calculatedGPA = (totalQualityPoints / totalCredits).toFixed(2);
+  if (gpaHuge) gpaHuge.innerText = calculatedGPA;
+
+  // Render Courses Cards
+  if (grid) {
+    grid.innerHTML = DEFAULT_COURSES.map(course => {
+      const courseTasks = tasks.filter(t => (t.course || '').includes(course.code));
+      const pendingCount = courseTasks.filter(t => t.status !== 'completed').length;
+
+      return `
+        <div class="course-planner-card">
+          <div class="course-card-top">
+            <span class="course-code-pill">${course.code}</span>
+            <span class="course-grade-badge">${course.currentGrade} (${course.percentage}%)</span>
+          </div>
+          <div class="course-title-sub">${course.name}</div>
+          <div class="course-meta-row">
+            <span>${course.professor}</span>
+            <span>${course.credits} Credits</span>
+          </div>
+          <div style="font-size: 11.5px; color: var(--text-muted);">
+            <span>${course.room} • ${course.schedule}</span>
+          </div>
+
+          <!-- Syllabus Weighting Bar -->
+          <div style="margin-top: 8px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">
+              <span>Syllabus Breakdown</span>
+              <span>100%</span>
+            </div>
+            <div class="syllabus-breakdown-bar">
+              ${course.syllabus.map(s => `<div class="syllabus-slice" style="width: ${s.weight}%; background-color: ${s.color};" title="${s.label} (${s.weight}%)"></div>`).join('')}
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+              ${course.syllabus.map(s => `
+                <div style="display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text-muted);">
+                  <span style="width: 6px; height: 6px; border-radius: 50%; background: ${s.color};"></span>
+                  <span>${s.label}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 4px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 12px; font-weight: 600; color: ${pendingCount > 0 ? '#0284c7' : '#16a34a'};">
+              ${pendingCount > 0 ? `${pendingCount} Tasks Due` : 'All Caught Up!'}
+            </span>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;" onclick="window.location.hash='#tasks?search=${course.code}'">
+              View Tasks
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render Target GPA Simulator Sliders
+  if (simContainer) {
+    simContainer.innerHTML = DEFAULT_COURSES.map(course => `
+      <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; margin-bottom: 6px;">
+          <span>${course.code}</span>
+          <span id="slider-grade-val-${course.id}">${course.currentGrade}</span>
+        </div>
+        <select class="custom-select" style="width: 100%; padding: 4px 8px; font-size: 12px;" onchange="updateSimulatedGpa('${course.id}', this.value)">
+          ${Object.keys(GRADE_POINTS).map(g => `<option value="${g}" ${g === course.currentGrade ? 'selected' : ''}>${g} (${GRADE_POINTS[g].toFixed(1)})</option>`).join('')}
+        </select>
+      </div>
+    `).join('');
+  }
+}
+
+window.simCourseGrades = {};
+window.updateSimulatedGpa = function(courseId, newGrade) {
+  window.simCourseGrades[courseId] = newGrade;
+  const label = document.getElementById(`slider-grade-val-${courseId}`);
+  if (label) label.innerText = newGrade;
+
+  let totalQP = 0;
+  let totalCreds = 0;
+
+  DEFAULT_COURSES.forEach(c => {
+    const grade = window.simCourseGrades[c.id] || c.currentGrade;
+    const pts = GRADE_POINTS[grade] || 3.0;
+    totalQP += pts * c.credits;
+    totalCreds += c.credits;
+  });
+
+  const simGpa = (totalQP / totalCreds).toFixed(2);
+  const badge = document.getElementById('simulated-gpa-badge');
+  if (badge) badge.innerText = `Predicted GPA: ${simGpa}`;
+};
 
 // Helpers
 function capitalize(s) {

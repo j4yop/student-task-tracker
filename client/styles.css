@@ -2458,3 +2458,538 @@ input:checked + .slider:before {
     border-radius: var(--radius-full);
   }
 }
+
+/* ==========================================================================
+   ADVANCED ACADEMIC SUITE (KANBAN, POMODORO, COURSES/GPA, MATRIX)
+   ========================================================================== */
+
+/* Header Pomodoro Pill */
+.header-pomodoro-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--accent-cyan-bg);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.header-pomodoro-pill:hover {
+  background-color: var(--accent-cyan-light);
+  border-color: var(--accent-cyan);
+}
+
+.pomodoro-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: #22c55e;
+  animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* View Switcher Pills */
+.view-switcher-wrap {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-tertiary);
+  padding: 3px;
+  border-radius: var(--radius-md);
+  gap: 2px;
+}
+
+.view-switch-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.view-switch-btn.active {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Kanban Board Layout */
+.kanban-board-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  align-items: flex-start;
+  min-height: 500px;
+}
+
+.kanban-column {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.kanban-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid var(--border-color);
+}
+
+.kanban-col-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kanban-count-badge {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.kanban-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100px;
+}
+
+.kanban-task-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kanban-task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: #cbd5e1;
+}
+
+.kanban-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kanban-card-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.kanban-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.kanban-move-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-kanban-move {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-kanban-move:hover {
+  background-color: var(--accent-cyan);
+  color: #ffffff;
+}
+
+/* Eisenhower Matrix View */
+.matrix-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  min-height: 600px;
+}
+
+.matrix-quadrant {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+.quadrant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+}
+
+.q1-urgent-important { border-color: #dc2626; }
+.q2-schedule { border-color: #06b6d4; }
+.q3-delegate { border-color: #f59e0b; }
+.q4-eliminate { border-color: #94a3b8; }
+
+/* Pomodoro Focus Suite */
+.pomodoro-suite-card {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 40px 32px;
+  box-shadow: var(--shadow-card);
+}
+
+.pomodoro-timer-circle {
+  width: 240px;
+  height: 240px;
+  margin: 28px auto;
+  border-radius: var(--radius-full);
+  border: 8px solid var(--bg-tertiary);
+  border-top-color: var(--accent-cyan);
+  border-right-color: var(--accent-cyan);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: border-color var(--transition-normal);
+}
+
+.pomodoro-digits {
+  font-size: 54px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.pomodoro-mode-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pomodoro-mode-selector {
+  display: inline-flex;
+  background-color: var(--bg-tertiary);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  gap: 4px;
+}
+
+.pomodoro-tab-btn {
+  padding: 7px 18px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pomodoro-tab-btn.active {
+  background-color: var(--bg-secondary);
+  color: var(--accent-cyan);
+  box-shadow: var(--shadow-sm);
+}
+
+.pomodoro-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.btn-pomodoro-main {
+  width: 140px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  font-size: 15px;
+}
+
+.pomodoro-task-binding-wrap {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.pomodoro-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #fef3c7;
+  color: #d97706;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* Ambient Sounds Bar */
+.ambient-sounds-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.sound-toggle-pill {
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all var(--transition-fast);
+}
+
+.sound-toggle-pill.active {
+  background-color: var(--accent-cyan-bg);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* Courses & GPA Planner */
+.courses-gpa-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.gpa-summary-card {
+  background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+  color: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 24px rgba(6, 182, 212, 0.25);
+}
+
+.gpa-card-left h2 {
+  color: #ffffff;
+  font-size: 26px;
+}
+
+.gpa-card-left p {
+  opacity: 0.9;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.gpa-metric-cluster {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.gpa-huge-num {
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.gpa-target-label {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.courses-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.course-planner-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform var(--transition-fast);
+}
+
+.course-planner-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.course-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.course-code-pill {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--accent-cyan);
+}
+
+.course-grade-badge {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background-color: var(--cat-personal-bg);
+  color: var(--cat-personal);
+}
+
+.course-title-sub {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.course-meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.syllabus-breakdown-bar {
+  display: flex;
+  height: 6px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  gap: 2px;
+}
+
+.syllabus-slice {
+  height: 100%;
+}
+
+/* Subtasks in Quick-View */
+.subtasks-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subtasks-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subtasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.subtask-item.checked span {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.subtask-add-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.subtask-add-row input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  font-size: 12.5px;
+}
+
+@media (max-width: 992px) {
+  .kanban-board-container {
+    grid-template-columns: 1fr;
+  }
+  .matrix-grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .gpa-summary-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
