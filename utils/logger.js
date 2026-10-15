@@ -1,0 +1,24 @@
+const logger = {
+  info: (message, meta = {}) => {
+    if (process.env.NODE_ENV !== 'test') {
+      console.log(`[INFO] ${new Date().toISOString()} - ${message}`, Object.keys(meta).length ? meta : '');
+    }
+  },
+  error: (message, error = {}) => {
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(`[ERROR] ${new Date().toISOString()} - ${message}`, error.stack || error);
+    }
+  },
+  warn: (message, meta = {}) => {
+    if (process.env.NODE_ENV !== 'test') {
+      console.warn(`[WARN] ${new Date().toISOString()} - ${message}`, Object.keys(meta).length ? meta : '');
+    }
+  },
+  debug: (message, meta = {}) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[DEBUG] ${new Date().toISOString()} - ${message}`, Object.keys(meta).length ? meta : '');
+    }
+  }
+};
+
+module.exports = logger;
