@@ -1209,7 +1209,7 @@ const appViews = {
     <div class="dashboard-panel" style="max-width: 600px; margin: 0 auto;">
       <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
         <div class="avatar-wrapper" style="width: 64px; height: 64px;">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=faces&q=80" alt="Alex" style="width: 64px; height: 64px; border-radius: 50%;" />
+          <img src="avatar.jpeg" alt="Alex" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" />
         </div>
         <div>
           <h2>Alex Student</h2>
