@@ -67,7 +67,17 @@ const xssSanitizer = (req, res, next) => {
 
 const setupSecurity = (app) => {
   // Set security HTTP headers
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+        imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://picsum.photos"],
+      },
+    },
+  }));
 
   // Prevent CORS issues
   app.use(cors({
