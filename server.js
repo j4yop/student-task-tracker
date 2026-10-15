@@ -44,12 +44,20 @@ app.use('/api/analytics', require('./routes/analyticsRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 
-// Serve Frontend client directory statically
+// Serve Frontend client and public directories statically
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'client')));
 
 // Fallback all routes to SPA client index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'index.html'));
+  const publicIndex = path.join(__dirname, 'public', 'index.html');
+  const clientIndex = path.join(__dirname, 'client', 'index.html');
+  const fs = require('fs');
+  if (fs.existsSync(publicIndex)) {
+    res.sendFile(publicIndex);
+  } else {
+    res.sendFile(clientIndex);
+  }
 });
 
 // Centralized error handler middleware

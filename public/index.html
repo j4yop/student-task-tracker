@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Task & Assignment Tracker</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Rounded -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-theme">
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Main App Shell -->
+  <div id="app-shell" class="app-shell hidden">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon-wrap">
+            <svg class="brand-heartbeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12h4l3-8 4 16 3-8h4" />
+            </svg>
+          </div>
+          <h2 class="brand-title">Student Tracker</h2>
+        </div>
+        <button id="sidebar-toggle-close" class="sidebar-toggle-btn mobile-only" aria-label="Close sidebar">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">NAVIGATION</div>
+        <ul>
+          <li>
+            <a href="#dashboard" class="nav-link active" id="nav-dashboard">
+              <span class="material-symbols-rounded">dashboard</span>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#tasks" class="nav-link" id="nav-tasks">
+              <span class="material-symbols-rounded">format_list_bulleted</span>
+              <span>All Tasks</span>
+            </a>
+          </li>
+          <li>
+            <a href="#kanban" class="nav-link" id="nav-kanban">
+              <span class="material-symbols-rounded">view_kanban</span>
+              <span>Kanban Board</span>
+            </a>
+          </li>
+          <li>
+            <a href="#timetable" class="nav-link" id="nav-timetable">
+              <span class="material-symbols-rounded">table_chart</span>
+              <span>Class Timetable</span>
+            </a>
+          </li>
+          <li>
+            <a href="#pomodoro" class="nav-link" id="nav-pomodoro">
+              <span class="material-symbols-rounded">timer</span>
+              <span>Focus Timer</span>
+            </a>
+          </li>
+          <li>
+            <a href="#calendar" class="nav-link" id="nav-calendar">
+              <span class="material-symbols-rounded">calendar_month</span>
+              <span>Calendar</span>
+            </a>
+          </li>
+          <li>
+            <a href="#courses" class="nav-link" id="nav-courses">
+              <span class="material-symbols-rounded">school</span>
+              <span>Courses &amp; GPA</span>
+            </a>
+          </li>
+          <li>
+            <a href="#notes" class="nav-link" id="nav-notes">
+              <span class="material-symbols-rounded">auto_stories</span>
+              <span>Notes &amp; Formulas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#categories" class="nav-link" id="nav-categories">
+              <span class="material-symbols-rounded">category</span>
+              <span>Categories</span>
+            </a>
+          </li>
+          <li class="admin-only hidden" id="nav-admin-li">
+            <a href="#admin" class="nav-link" id="nav-admin">
+              <span class="material-symbols-rounded">admin_panel_settings</span>
+              <span>Admin Panel</span>
+            </a>
+          </li>
+          <li>
+            <a href="#profile" class="nav-link" id="nav-profile">
+              <span class="material-symbols-rounded">person</span>
+              <span>Profile</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Visily Categories Sidebar Group -->
+        <div class="sidebar-categories-group">
+          <div class="sidebar-categories-header">
+            <span>CATEGORIES</span>
+            <button class="btn-icon-subtle" id="btn-sidebar-filter-cat" title="Filter Categories">
+              <span class="material-symbols-rounded" style="font-size: 16px;">filter_alt</span>
+            </button>
+          </div>
+          <ul class="sidebar-categories-list" id="sidebar-categories-list">
+            <li>
+              <a href="#tasks?category=Assignments" class="sidebar-cat-item">
+                <span class="cat-dot dot-assignments"></span>
+                <span>Assignments</span>
+              </a>
+            </li>
+            <li>
+              <a href="#tasks?category=Exams" class="sidebar-cat-item">
+                <span class="cat-dot dot-exams"></span>
+                <span>Exams</span>
+              </a>
+            </li>
+            <li>
+              <a href="#tasks?category=Projects" class="sidebar-cat-item">
+                <span class="cat-dot dot-projects"></span>
+                <span>Projects</span>
+              </a>
+            </li>
+            <li>
+              <a href="#tasks?category=Personal" class="sidebar-cat-item">
+                <span class="cat-dot dot-personal"></span>
+                <span>Personal</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="#settings" class="nav-link" id="nav-settings" style="flex: 1; padding: 10px 14px;">
+          <span class="material-symbols-rounded">settings</span>
+          <span>Settings</span>
+        </a>
+        <button id="sidebar-collapse-btn" class="sidebar-collapse-btn desktop-only" title="Collapse sidebar">
+          <span class="material-symbols-rounded">chevron_left</span>
+        </button>
+        <button id="btn-logout" class="btn-logout" title="Logout">
+          <span class="material-symbols-rounded">logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Content Workspace -->
+    <main id="main-content" class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button id="sidebar-toggle-open" class="sidebar-toggle-btn mobile-only" aria-label="Open sidebar">
+            <span class="material-symbols-rounded">menu</span>
+          </button>
+          
+          <div class="mobile-brand-wrap mobile-only">
+            <div class="logo-icon-wrap small">
+              <svg class="brand-heartbeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h4l3-8 4 16 3-8h4" />
+              </svg>
+            </div>
+            <span class="mobile-brand-title">Student Tracker</span>
+          </div>
+
+          <div class="search-container desktop-only" id="header-search-bar">
+            <span class="material-symbols-rounded search-icon">search</span>
+            <input type="text" id="global-search" placeholder="Search tasks, courses, notes...">
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Pomodoro Mini Widget in Header -->
+          <a href="#pomodoro" class="header-pomodoro-pill desktop-only" id="header-pomodoro-pill" title="Open Focus Timer">
+            <span class="material-symbols-rounded" style="font-size: 18px; color: var(--accent-cyan);">timer</span>
+            <span id="header-pomodoro-text" style="font-weight: 700; font-size: 13px;">25:00 Focus</span>
+            <span class="pomodoro-pulse-dot"></span>
+          </a>
+
+          <!-- Quick Add Task Button -->
+          <button id="btn-quick-add" class="btn btn-primary btn-quick-add desktop-only">
+            <span class="material-symbols-rounded">add</span>
+            <span>Add Task</span>
+          </button>
+
+          <!-- Notifications Dropdown -->
+          <div class="notifications-dropdown" id="notifications-wrapper">
+            <button id="notifications-trigger" class="notifications-trigger" aria-label="Notifications">
+              <span class="material-symbols-rounded">notifications</span>
+              <span id="notification-badge" class="badge-dot hidden"></span>
+            </button>
+            <div id="notifications-menu" class="notifications-menu hidden">
+              <div class="notifications-header">
+                <h3>Notifications</h3>
+                <button id="btn-read-all" class="btn-text">Mark all read</button>
+              </div>
+              <div id="notifications-list" class="notifications-list">
+                <div class="empty-state">No new notifications</div>
+              </div>
+              <div class="notifications-footer">
+                <button id="btn-clear-notifications" class="btn-text">Clear all logs</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Quick Profile Info -->
+          <div class="user-profile-menu">
+            <div class="profile-trigger" id="profile-menu-trigger">
+              <div class="avatar-wrapper">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces&q=80" alt="Alex" class="profile-avatar-img" onerror="this.style.display='none'; document.getElementById('header-user-avatar').style.display='flex';" />
+                <div class="profile-avatar" id="header-user-avatar" style="display:none;">A</div>
+                <span class="online-indicator"></span>
+              </div>
+              <div class="profile-info desktop-only">
+                <span class="profile-name" id="header-user-name">Alex</span>
+                <span class="profile-role" id="header-user-role">GPA: 3.82</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic View Injection Container -->
+      <div id="app" class="view-container"></div>
+
+      <!-- App Global Footer -->
+      <footer class="app-footer desktop-only">
+        <div class="footer-copy">© 2024 Student Task & Assignment Tracker</div>
+        <div class="footer-links">
+          <a href="#settings">Privacy Policy</a>
+          <a href="#settings">Terms of Service</a>
+          <a href="#settings">Help Center</a>
+        </div>
+      </footer>
+    </main>
+
+    <!-- Mobile Floating Action Button (FAB) -->
+    <button id="mobile-fab-add" class="mobile-fab mobile-only" aria-label="Add New Task">
+      <span class="material-symbols-rounded">add</span>
+    </button>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="mobile-bottom-nav mobile-only">
+      <a href="#dashboard" class="mobile-nav-item active" id="mob-nav-dashboard">
+        <span class="material-symbols-rounded">grid_view</span>
+        <span>Home</span>
+      </a>
+      <a href="#tasks" class="mobile-nav-item" id="mob-nav-tasks">
+        <span class="material-symbols-rounded">edit_square</span>
+        <span>Tasks</span>
+      </a>
+      <a href="#kanban" class="mobile-nav-item" id="mob-nav-kanban">
+        <span class="material-symbols-rounded">view_kanban</span>
+        <span>Board</span>
+      </a>
+      <a href="#pomodoro" class="mobile-nav-item" id="mob-nav-pomodoro">
+        <span class="material-symbols-rounded">timer</span>
+        <span>Focus</span>
+      </a>
+      <a href="#calendar" class="mobile-nav-item" id="mob-nav-calendar">
+        <span class="material-symbols-rounded">calendar_month</span>
+        <span>Calendar</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Auth Layout Screen (Login / Register / Forgot Password) -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="logo-icon-wrap large" style="margin: 0 auto 16px;">
+          <svg class="brand-heartbeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h4l3-8 4 16 3-8h4" />
+          </svg>
+        </div>
+        <h1 class="brand-title">Student Tracker</h1>
+        <p id="auth-subtitle">Sign in to track assignments & deadlines</p>
+      </div>
+
+      <!-- Auth Form Container -->
+      <div id="auth-form-container"></div>
+    </div>
+  </div>
+
+  <!-- Task Detail Drawer (Desktop Right Slide-Over / Mobile Bottom Sheet) -->
+  <div id="detail-drawer" class="detail-drawer">
+    <div class="drawer-header">
+      <div class="drawer-header-left">
+        <button id="btn-close-drawer" class="btn-icon" aria-label="Close details">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+        <h3 id="drawer-header-title">Task Details</h3>
+      </div>
+      <div class="drawer-header-actions">
+        <button id="btn-drawer-quick-edit" class="btn-icon" title="Edit Task">
+          <span class="material-symbols-rounded">edit</span>
+        </button>
+        <button id="btn-drawer-quick-delete" class="btn-icon text-danger" title="Delete Task">
+          <span class="material-symbols-rounded">delete</span>
+        </button>
+      </div>
+    </div>
+    <div class="drawer-mobile-handle mobile-only">
+      <span class="handle-bar"></span>
+    </div>
+    <div class="drawer-body" id="drawer-content">
+      <!-- Task Details injected here dynamically -->
+    </div>
+  </div>
+  <div id="drawer-overlay" class="drawer-overlay"></div>
+
+  <!-- Add/Edit Task Modal -->
+  <div id="task-modal" class="modal">
+    <div class="modal-content modal-task-visily">
+      <div class="modal-header">
+        <div class="modal-header-icon-wrap">
+          <span class="material-symbols-rounded">add</span>
+        </div>
+        <div class="modal-header-text">
+          <h3 id="modal-title">Add New Task</h3>
+          <p class="modal-subtitle">Fill in the details below to organize your schedule.</p>
+        </div>
+        <button id="btn-close-modal" class="btn-icon modal-close-btn" aria-label="Close modal">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <form id="task-form" class="task-form">
+        <input type="hidden" id="task-form-id">
+        
+        <!-- Task Title -->
+        <div class="form-group">
+          <label for="task-title">Task Title<span class="required">*</span></label>
+          <input type="text" id="task-title" required placeholder="e.g., Chemistry Lab Report">
+          <div class="validation-demo-link-wrap">
+            <button type="button" id="btn-trigger-validation-demo" class="btn-text-link">Trigger Validation Error Demo</button>
+            <span id="title-error-msg" class="field-error-text hidden">Title cannot be blank</span>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="task-desc">Description</label>
+          <textarea id="task-desc" rows="3" placeholder="Add notes, resources, or specific goals for this task..."></textarea>
+        </div>
+
+        <!-- Category Chip Selector -->
+        <div class="form-group">
+          <label>Category<span class="required">*</span></label>
+          <div class="category-chip-selector" id="category-chips-container">
+            <!-- Chips generated dynamically -->
+          </div>
+          <input type="hidden" id="task-category-val" required>
+        </div>
+
+        <!-- Course / Subject Code -->
+        <div class="form-group">
+          <label for="task-course">Course / Subject Code</label>
+          <input type="text" id="task-course" placeholder="e.g., MATH 301, CS301 Systems, BIO 102">
+        </div>
+
+        <!-- Due Date and Time -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="task-due-date">Due Date<span class="required">*</span></label>
+            <div class="input-with-icon">
+              <span class="material-symbols-rounded input-icon">calendar_today</span>
+              <input type="date" id="task-due-date" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="task-due-time">Due Time<span class="required">*</span></label>
+            <div class="input-with-icon">
+              <span class="material-symbols-rounded input-icon">schedule</span>
+              <input type="time" id="task-due-time" required value="23:59">
+            </div>
+          </div>
+        </div>
+
+        <!-- Priority Level Segmented Control -->
+        <div class="form-group">
+          <label>Priority Level</label>
+          <div class="priority-segmented-control">
+            <label class="priority-btn priority-low" id="lbl-priority-low">
+              <input type="radio" name="priority" value="low" id="priority-low">
+              <span class="material-symbols-rounded icon-priority">flag</span>
+              <span>Low</span>
+            </label>
+            <label class="priority-btn priority-medium active" id="lbl-priority-medium">
+              <input type="radio" name="priority" value="medium" id="priority-medium" checked>
+              <span class="material-symbols-rounded icon-priority">flag</span>
+              <span>Medium</span>
+            </label>
+            <label class="priority-btn priority-high" id="lbl-priority-high">
+              <input type="radio" name="priority" value="high" id="priority-high">
+              <span class="material-symbols-rounded icon-priority">flag</span>
+              <span>High</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Remind Me -->
+        <div class="form-group remind-me-container">
+          <div class="remind-icon-box">
+            <span class="material-symbols-rounded">notifications_none</span>
+          </div>
+          <div class="remind-text-box">
+            <span class="remind-title">Remind Me</span>
+            <span class="remind-sub">Notify 1 hour before deadline</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="task-remind" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="modal-footer">
+          <button type="button" id="btn-delete-from-modal" class="btn btn-danger-icon hidden" title="Delete Task">
+            <span class="material-symbols-rounded">delete</span>
+          </button>
+          <div class="modal-footer-right">
+            <button type="button" id="btn-cancel-modal" class="btn btn-secondary">Cancel</button>
+            <button type="submit" id="btn-save-task" class="btn btn-primary">Save Task</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bulk Syllabus & Task Importer Modal (planit & DDL Killer Inspired) -->
+  <div id="import-modal" class="modal">
+    <div class="modal-content" style="max-width: 560px;">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="material-symbols-rounded" style="color: var(--accent-cyan); font-size: 24px;">upload_file</span>
+          <h3 style="font-size: 18px; font-weight: 800;">Import Syllabus &amp; Tasks</h3>
+        </div>
+        <button id="btn-close-import-modal" class="btn-icon" aria-label="Close modal">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <div style="padding: 20px 24px;">
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+          Paste assignments from your course syllabus, LMS (Canvas/Blackboard), or CSV list. One assignment per line:
+        </p>
+        <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px 12px; font-size: 11.5px; color: var(--text-muted); font-family: monospace; margin-bottom: 12px;">
+          Format: Task Title | Course | Due Date (YYYY-MM-DD) | Priority (Low/Med/High)<br>
+          Example: Problem Set 5 | MATH 301 | 2024-11-02 | High
+        </div>
+        <textarea id="import-tasks-textarea" class="form-input" rows="7" placeholder="Calculus Lab Report 3 | MATH 301 | 2024-11-04 | High
+Biology Quiz 4 | BIO 102 | 2024-11-06 | Medium
+History Presentation | HIST 205 | 2024-11-10 | High" style="width: 100%; font-family: monospace; font-size: 12.5px; padding: 10px;"></textarea>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" id="btn-cancel-import" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="btn-submit-import" class="btn btn-primary" onclick="submitBulkImport()">Import All Tasks</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Confirmation Dialog -->
+  <div id="confirm-modal" class="modal confirm-modal">
+    <div class="modal-content confirm-content">
+      <div class="confirm-body">
+        <span class="material-symbols-rounded confirm-icon">warning</span>
+        <h3 id="confirm-title">Are you sure?</h3>
+        <p id="confirm-message">This action cannot be undone.</p>
+      </div>
+      <div class="confirm-footer">
+        <button id="btn-confirm-cancel" class="btn btn-secondary">Cancel</button>
+        <button id="btn-confirm-ok" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
