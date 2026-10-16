@@ -1298,6 +1298,7 @@ async function mountView(viewName) {
   authScreen.classList.add('hidden');
   appShell.classList.remove('hidden');
   appState.activeView = actualView;
+  if (window.triggerAppleHaptic) triggerAppleHaptic('click');
 
   if (actualView === 'dashboard') {
     appContainer.innerHTML = appViews.dashboard();
@@ -2017,9 +2018,56 @@ function selectPriorityPill(priority) {
 }
 
 // ----------------------------------------------------
+// APPLE DESIGN AUDIO-HAPTIC FEEDBACK (WWDC Designing Audio-Haptic Experiences)
+// ----------------------------------------------------
+window.triggerAppleHaptic = function(type = 'click') {
+  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+    if (type === 'click') navigator.vibrate(6);
+    else if (type === 'success') navigator.vibrate([10, 30, 15]);
+  }
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!window._appleHapticCtx) {
+      window._appleHapticCtx = new AudioContext();
+    }
+    const ctx = window._appleHapticCtx;
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    const now = ctx.currentTime;
+    if (type === 'click') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(820, now);
+      osc.frequency.exponentialRampToValueAtTime(160, now + 0.012);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.012);
+      osc.start(now);
+      osc.stop(now + 0.012);
+    } else if (type === 'success') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.setValueAtTime(659.25, now + 0.08);
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+      osc.start(now);
+      osc.stop(now + 0.22);
+    }
+  } catch (e) {}
+};
+
+// ----------------------------------------------------
 // ACTIONS & EVENT LISTENERS
 // ----------------------------------------------------
 window.toggleTaskComplete = async function(id, isCompleted) {
+  if (window.triggerAppleHaptic) {
+    triggerAppleHaptic(isCompleted ? 'success' : 'click');
+  }
   await apiFetch(`/api/tasks/${id}`, {
     method: 'PUT',
     body: JSON.stringify({ status: isCompleted ? 'completed' : 'pending' })
