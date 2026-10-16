@@ -267,7 +267,10 @@ const DEFAULT_CATEGORIES = [
   { _id: 'cat-personal', name: 'Personal', color: '#16a34a' },
 ];
 
-// Initialize local storage backup
+// Initialize local storage backup & legacy cache migration
+if (localStorage.getItem('accessToken') === 'mock-jwt-token-alex') {
+  localStorage.setItem('accessToken', 'mock-jwt-token-amar');
+}
 if (!localStorage.getItem('visily_mock_tasks')) {
   localStorage.setItem('visily_mock_tasks', JSON.stringify(DEFAULT_VISILY_TASKS));
 }
@@ -309,8 +312,23 @@ const appState = {
   setState(changes) {
     Object.assign(this, changes);
     this.notify();
+    syncUserInterface();
   }
 };
+
+// ----------------------------------------------------
+// USER INTERFACE SYNCHRONIZER
+// ----------------------------------------------------
+function syncUserInterface() {
+  const currentName = appState.user?.username || 'Amar';
+  document.querySelectorAll('.profile-name, #header-user-name, .sidebar-user-name, #sidebar-user-name').forEach(el => {
+    el.textContent = currentName;
+  });
+  const greetingEl = document.getElementById('desktop-greeting-name');
+  if (greetingEl) {
+    greetingEl.textContent = `Welcome back, ${currentName}!`;
+  }
+}
 
 // ----------------------------------------------------
 // TOAST NOTIFICATIONS
@@ -531,13 +549,13 @@ const appViews = {
   // 2. DASHBOARD VIEW (Desktop & Mobile per Visily screens)
   dashboard: () => `
     <div class="dashboard-visily-grid">
-      <!-- Desktop Greeting Header -->
-      <div class="dashboard-greeting-header desktop-only">
+      <!-- Universal Greeting Header (Visible on Desktop & Mobile) -->
+      <div class="dashboard-greeting-header">
         <div class="greeting-text">
           <h1 id="desktop-greeting-name">Welcome back, Amar!</h1>
           <p id="desktop-greeting-sub">You have 5 tasks to complete today.</p>
         </div>
-        <div class="greeting-actions">
+        <div class="greeting-actions desktop-only">
           <button class="btn btn-secondary" onclick="window.location.hash='#timetable'">
             <span class="material-symbols-rounded">table_chart</span>
             <span>Class Timetable</span>
@@ -1213,7 +1231,7 @@ const appViews = {
         </div>
         <div>
           <h2>Amar Student</h2>
-          <p style="color: var(--text-secondary); font-size: 13.5px;">student@tracker.com • Computer Science & Economics</p>
+          <p style="color: var(--text-secondary); font-size: 13.5px;">amar@tracker.com • Computer Science & Economics</p>
         </div>
       </div>
       <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
@@ -1299,6 +1317,7 @@ async function mountView(viewName) {
   appShell.classList.remove('hidden');
   appState.activeView = actualView;
   if (window.triggerAppleHaptic) triggerAppleHaptic('click');
+  syncUserInterface();
 
   if (actualView === 'dashboard') {
     appContainer.innerHTML = appViews.dashboard();
@@ -1333,6 +1352,7 @@ async function mountView(viewName) {
     appContainer.innerHTML = appViews.dashboard();
     await initDashboardView();
   }
+  syncUserInterface();
 }
 
 // ----------------------------------------------------
@@ -3311,6 +3331,7 @@ function getCatClass(name) {
 
 // Global Event Attachments
 document.addEventListener('DOMContentLoaded', () => {
+  syncUserInterface();
   // Theme initialization
   document.body.className = `${appState.theme}-theme`;
 

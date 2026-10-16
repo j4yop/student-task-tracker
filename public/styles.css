@@ -262,8 +262,72 @@ button {
 
 .sidebar-nav {
   flex: 1;
-  padding: 16px 12px;
+  padding: 12px 12px;
   overflow-y: auto;
+}
+
+/* Sidebar User Profile Card */
+.sidebar-user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 4px 14px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.035);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.dark-theme .sidebar-user-card {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-user-card:hover {
+  background: rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.dark-theme .sidebar-user-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.sidebar-user-card:active {
+  transform: scale(0.98);
+}
+
+.sidebar-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar-user-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.sidebar-user-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-chevron {
+  font-size: 18px;
+  color: var(--text-muted);
 }
 
 .nav-section-title {
@@ -481,6 +545,13 @@ button {
   cursor: pointer;
   padding: 4px;
   border-radius: var(--radius-full);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-fast);
+}
+
+.profile-trigger:hover {
+  opacity: 0.85;
 }
 
 .avatar-wrapper {
@@ -2429,6 +2500,17 @@ input:checked + .slider:before {
 
   .desktop-only {
     display: none !important;
+  }
+
+  .dashboard-greeting-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .greeting-text h1 {
+    font-size: 22px;
   }
 
   .view-container {

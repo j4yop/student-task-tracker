@@ -20,8 +20,8 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
-  <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="styles.css">
+  <!-- CSS Stylesheet with cache-buster -->
+  <link rel="stylesheet" href="styles.css?v=20261016_amar_v3">
 </head>
 <body class="light-theme">
   <!-- Toast Notification Container -->
@@ -44,6 +44,20 @@
           <span class="material-symbols-rounded">close</span>
         </button>
       </div>
+
+      <!-- Sidebar User Profile Card -->
+      <a href="#profile" class="sidebar-user-card" id="sidebar-user-profile-link" title="View Amar's Profile">
+        <div class="avatar-wrapper">
+          <img src="avatar.jpeg" alt="Amar" class="profile-avatar-img" onerror="this.style.display='none'; document.getElementById('sidebar-user-avatar').style.display='flex';" />
+          <div class="profile-avatar" id="sidebar-user-avatar" style="display:none;">A</div>
+          <span class="online-indicator"></span>
+        </div>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-name" id="sidebar-user-name">Amar</span>
+          <span class="sidebar-user-sub">Student • GPA 3.82</span>
+        </div>
+        <span class="material-symbols-rounded sidebar-user-chevron">chevron_right</span>
+      </a>
 
       <nav class="sidebar-nav">
         <div class="nav-section-title">NAVIGATION</div>
@@ -227,17 +241,17 @@
 
           <!-- User Quick Profile Info -->
           <div class="user-profile-menu">
-            <div class="profile-trigger" id="profile-menu-trigger">
+            <a href="#profile" class="profile-trigger" id="profile-menu-trigger" title="View Amar's Profile">
               <div class="avatar-wrapper">
                 <img src="avatar.jpeg" alt="Amar" class="profile-avatar-img" onerror="this.style.display='none'; document.getElementById('header-user-avatar').style.display='flex';" />
                 <div class="profile-avatar" id="header-user-avatar" style="display:none;">A</div>
                 <span class="online-indicator"></span>
               </div>
-              <div class="profile-info desktop-only">
+              <div class="profile-info">
                 <span class="profile-name" id="header-user-name">Amar</span>
-                <span class="profile-role" id="header-user-role">GPA: 3.82</span>
+                <span class="profile-role desktop-only" id="header-user-role">GPA: 3.82</span>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </header>
@@ -498,7 +512,7 @@ History Presentation | HIST 205 | 2024-11-10 | High" style="width: 100%; font-fa
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="app.js"></script>
+  <!-- Scripts with cache-buster -->
+  <script src="app.js?v=20261016_amar_v3"></script>
 </body>
 </html>
