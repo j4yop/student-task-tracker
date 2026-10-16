@@ -276,12 +276,12 @@ if (!localStorage.getItem('visily_mock_tasks')) {
 // STATE MANAGER (Publisher/Subscriber)
 // ----------------------------------------------------
 const appState = {
-  user: { username: 'Alex', email: 'alex@tracker.com', role: 'student' },
-  accessToken: localStorage.getItem('accessToken') || 'mock-jwt-token-alex',
+  user: { username: 'Amar', email: 'amar@tracker.com', role: 'student' },
+  accessToken: localStorage.getItem('accessToken') || 'mock-jwt-token-amar',
   theme: localStorage.getItem('theme') || 'light',
   categories: DEFAULT_CATEGORIES,
   notifications: [
-    { id: '1', message: 'Welcome back, Alex! 5 tasks are due today.', sentAt: new Date().toISOString() },
+    { id: '1', message: 'Welcome back, Amar! 5 tasks are due today.', sentAt: new Date().toISOString() },
     { id: '2', message: 'Reminder: Calculus III Problem Set is due in 2 hours', sentAt: new Date().toISOString() }
   ],
   activeView: 'dashboard',
@@ -511,11 +511,11 @@ const appViews = {
     <form id="register-form">
       <div class="form-group" style="text-align: left; margin-bottom: 14px;">
         <label for="reg-name">Full Username</label>
-        <input type="text" id="reg-name" required placeholder="e.g. Alex Tracker" value="Alex">
+        <input type="text" id="reg-name" required placeholder="e.g. Amar Tracker" value="Amar">
       </div>
       <div class="form-group" style="text-align: left; margin-bottom: 14px;">
         <label for="reg-email">Email Address</label>
-        <input type="email" id="reg-email" required placeholder="alex@tracker.com" value="alex@tracker.com">
+        <input type="email" id="reg-email" required placeholder="amar@tracker.com" value="amar@tracker.com">
       </div>
       <div class="form-group" style="text-align: left; margin-bottom: 18px;">
         <label for="reg-password">Password</label>
@@ -534,7 +534,7 @@ const appViews = {
       <!-- Desktop Greeting Header -->
       <div class="dashboard-greeting-header desktop-only">
         <div class="greeting-text">
-          <h1 id="desktop-greeting-name">Welcome back, Alex!</h1>
+          <h1 id="desktop-greeting-name">Welcome back, Amar!</h1>
           <p id="desktop-greeting-sub">You have 5 tasks to complete today.</p>
         </div>
         <div class="greeting-actions">
@@ -1209,10 +1209,10 @@ const appViews = {
     <div class="dashboard-panel" style="max-width: 600px; margin: 0 auto;">
       <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
         <div class="avatar-wrapper" style="width: 64px; height: 64px;">
-          <img src="avatar.jpeg" alt="Alex" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" />
+          <img src="avatar.jpeg" alt="Amar" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" />
         </div>
         <div>
-          <h2>Alex Student</h2>
+          <h2>Amar Student</h2>
           <p style="color: var(--text-secondary); font-size: 13.5px;">student@tracker.com • Computer Science & Economics</p>
         </div>
       </div>
@@ -2109,7 +2109,7 @@ function setupLoginListeners() {
   if (!form) return;
   form.onsubmit = (e) => {
     e.preventDefault();
-    appState.setState({ user: { username: 'Alex', email: 'alex@tracker.com' }, accessToken: 'mock-token' });
+    appState.setState({ user: { username: 'Amar', email: 'amar@tracker.com' }, accessToken: 'mock-token' });
     showToast('Signed in successfully');
     window.location.hash = '#dashboard';
   };
@@ -2121,7 +2121,7 @@ function setupRegisterListeners() {
   form.onsubmit = (e) => {
     e.preventDefault();
     const name = document.getElementById('reg-name').value;
-    appState.setState({ user: { username: name, email: 'alex@tracker.com' }, accessToken: 'mock-token' });
+    appState.setState({ user: { username: name, email: 'amar@tracker.com' }, accessToken: 'mock-token' });
     showToast('Registration successful! Welcome to Student Tracker');
     window.location.hash = '#dashboard';
   };

@@ -21,7 +21,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"Alex Student\",\n  \"email\": \"student@tracker.com\",\n  \"password\": \"studentpassword\"\n}"
+              "raw": "{\n  \"username\": \"Amar Student\",\n  \"email\": \"student@tracker.com\",\n  \"password\": \"studentpassword\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/auth/register",

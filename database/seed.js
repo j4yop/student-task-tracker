@@ -43,7 +43,7 @@ const seedDatabase = async () => {
     
     // Admin
     const admin = new User({
-      username: 'Alex Admin',
+      username: 'Amar Admin',
       email: 'admin@tracker.com',
       password: 'adminpassword',
       role: 'admin',
@@ -53,7 +53,7 @@ const seedDatabase = async () => {
 
     // Student
     const student = new User({
-      username: 'Alex Student',
+      username: 'Amar Student',
       email: 'student@tracker.com',
       password: 'studentpassword',
       role: 'student',

@@ -13,8 +13,8 @@ jest.mock('../models/User', () => {
       return {
         select: jest.fn().mockResolvedValue({
           _id: id,
-          username: 'Alex Student',
-          email: 'alex_test@tracker.com',
+          username: 'Amar Student',
+          email: 'amar_test@tracker.com',
           role: 'student',
           preferences: { theme: 'dark', notifications: { email: true, browser: true } },
         }),
